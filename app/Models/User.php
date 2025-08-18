@@ -38,6 +38,11 @@ class User extends Authenticatable
      *
      * @return array<string, string>
      */
+    public function isAdmin(): bool
+{
+    return $this->role === 'admin'; // adjust to your column name/value
+}
+
     protected function casts(): array
     {
         return [

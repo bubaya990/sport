@@ -68,4 +68,4 @@ Route::resource('evenements', EvenementController::class);
 Route::get('/evenements', [EvenementController::class, 'index'])->name('evenements.index');
 
 
-//require __DIR__.'/auth.php';
+require __DIR__.'/auth.php';

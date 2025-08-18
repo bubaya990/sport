@@ -13,19 +13,16 @@
     <div class="sidebar-nav">
         <div class="nav-section">
             <div class="nav-section-title">Main</div>
-            <a href="{{ route('site.dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">Dashboard</a>
+            <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">Dashboard</a>
              <a href="{{ route('aboutus.index') }}">About us</a>
 
             
             <a href="{{ route('evenements.index') }}" class="{{ request()->routeIs('evenements.*') ? 'active' : '' }}">Our events</a>
         </div>
         
-        <div class="nav-section">
-            <div class="nav-section-title">Other</div>
-            <a href="#">Settings</a>
-        </div>
+        
     </div>
-    <!--  
+    
     <div class="sidebar-footer">
         <form id="logoutForm" action="{{ route('logout') }}" method="POST">
             @csrf
@@ -33,7 +30,7 @@
                 Logout
             </button>
         </form>
-    </div>-->
+    </div>
 </aside>
 
 <style>
