@@ -12,8 +12,7 @@
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
         <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
 
-        <!-- Scripts -->
-
+        <!-- Inline Styles to Maintain Design -->
         <style>
             :root {
                 --primary: #00c8d7;
@@ -36,27 +35,29 @@
             
             * {
                 box-sizing: border-box;
+                margin: 0;
+                padding: 0;
             }
             
             body {
-                font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+                font-family: 'Figtree', -apple-system, BlinkMacSystemFont, sans-serif;
                 background-color: var(--darker);
                 color: var(--text);
                 line-height: 1.6;
-                margin: 0;
-                padding: 0;
                 overflow-x: hidden;
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
             }
 
-            /* Main Content */
+            /* Main Layout */
             .main {
                 flex-grow: 1;
                 padding: 20px;
                 background: linear-gradient(135deg, #1a2332 0%, #2d3748 50%, #374151 100%);
-                min-height: 100vh;
                 width: 100%;
-                max-width: 100vw;
-                overflow-x: hidden;
+                margin-left: 250px;
+                transition: margin-left 0.3s ease;
             }
 
             /* Top Navigation */
@@ -74,7 +75,6 @@
                 border-bottom: 1px solid rgba(255, 255, 255, 0.1);
                 transition: all 0.3s ease;
                 width: 100%;
-                max-width: 100vw;
             }
 
             .top-nav.scrolled {
@@ -86,6 +86,7 @@
                 font-size: 20px;
                 font-weight: 700;
                 color: var(--primary);
+                text-decoration: none;
                 transition: all 0.3s ease;
             }
 
@@ -136,11 +137,6 @@
                 transition: all 0.3s ease;
             }
 
-            .user-avatar:hover {
-                transform: scale(1.1);
-                box-shadow: 0 0 0 3px rgba(0, 200, 215, 0.3);
-            }
-
             /* Section Card */
             .section-card {
                 background: var(--card-bg);
@@ -151,12 +147,6 @@
                 backdrop-filter: blur(8px);
                 transition: all 0.3s ease;
                 width: 100%;
-                overflow: hidden;
-            }
-
-            .section-card:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             }
 
             .section-header {
@@ -176,11 +166,6 @@
                 justify-content: center;
                 font-size: 20px;
                 color: white;
-                transition: all 0.3s ease;
-            }
-
-            .section-header:hover .section-icon {
-                transform: rotate(10deg) scale(1.1);
             }
 
             .section-title {
@@ -190,7 +175,7 @@
                 flex: 1;
             }
 
-            /* Modern Button Styles */
+            /* Button Styles */
             .btn {
                 display: inline-flex;
                 align-items: center;
@@ -201,112 +186,70 @@
                 font-weight: 500;
                 font-size: 14px;
                 cursor: pointer;
-                transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-                border: none;
+                transition: all 0.3s ease;
                 text-decoration: none;
                 position: relative;
                 overflow: hidden;
-            }
-
-            .btn-icon {
-                width: 18px;
-                height: 18px;
-                transition: all 0.3s ease;
+                border: none;
             }
 
             .btn-primary {
                 background: linear-gradient(135deg, var(--primary), var(--primary-dark));
                 color: white;
-                box-shadow: 0 4px 6px rgba(0, 200, 215, 0.2);
             }
 
             .btn-primary:hover {
-                background: linear-gradient(135deg, var(--primary-dark), var(--primary));
                 transform: translateY(-2px);
-                box-shadow: 0 6px 12px rgba(0, 200, 215, 0.3);
-            }
-
-            .btn-success {
-                background: linear-gradient(135deg, var(--success), #0d9c6f);
-                color: white;
-                box-shadow: 0 4px 6px rgba(16, 185, 129, 0.2);
-            }
-
-            .btn-success:hover {
-                background: linear-gradient(135deg, #0d9c6f, var(--success));
-                transform: translateY(-2px);
-                box-shadow: 0 6px 12px rgba(16, 185, 129, 0.3);
-            }
-
-            .btn-warning {
-                background: linear-gradient(135deg, var(--warning), #e6950a);
-                color: white;
-                box-shadow: 0 4px 6px rgba(245, 158, 11, 0.2);
-            }
-
-            .btn-warning:hover {
-                background: linear-gradient(135deg, #e6950a, var(--warning));
-                transform: translateY(-2px);
-                box-shadow: 0 6px 12px rgba(245, 158, 11, 0.3);
-            }
-
-            .btn-danger {
-                background: linear-gradient(135deg, var(--danger), #e03e3e);
-                color: white;
-                box-shadow: 0 4px 6px rgba(239, 68, 68, 0.2);
-            }
-
-            .btn-danger:hover {
-                background: linear-gradient(135deg, #e03e3e, var(--danger));
-                transform: translateY(-2px);
-                box-shadow: 0 6px 12px rgba(239, 68, 68, 0.3);
+                box-shadow: 0 4px 8px rgba(0, 200, 215, 0.3);
             }
 
             .btn-outline {
                 background: transparent;
                 border: 1px solid var(--primary);
                 color: var(--primary);
-                transition: all 0.3s ease;
             }
 
             .btn-outline:hover {
                 background: rgba(0, 200, 215, 0.1);
-                transform: translateY(-2px);
-                box-shadow: 0 4px 8px rgba(0, 200, 215, 0.1);
             }
 
-            .btn-small {
-                padding: 8px 16px;
-                font-size: 13px;
-            }
-
-            /* Button Ripple Effect */
-            .btn::after {
-                content: "";
-                position: absolute;
-                width: 100%;
-                height: 100%;
-                top: 0;
-                left: 0;
-                background: radial-gradient(circle, rgba(255,255,255,0.3) 1%, transparent 1%) center/15000%;
-                opacity: 0;
-                transition: opacity 0.5s, background-size 0.5s;
-            }
-
-            .btn:active::after {
-                background-size: 100%;
-                opacity: 1;
-                transition: 0s;
-            }
-
-            /* Main Content Container */
+            /* Main Content */
             .main-content {
                 width: 100%;
                 max-width: 100%;
-                overflow-x: hidden;
+                position: relative;
+                z-index: 1;
+            }
+
+            /* Ripple Effect */
+            .ripple {
+                position: absolute;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.4);
+                transform: scale(0);
+                animation: ripple 0.6s linear;
+                pointer-events: none;
+            }
+
+            @keyframes ripple {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
             }
 
             /* Responsive */
+            @media (max-width: 1024px) {
+                .main {
+                    margin-left: 0;
+                    padding-top: 80px;
+                }
+                
+                .top-nav {
+                    padding: 12px 16px;
+                }
+            }
+
             @media (max-width: 768px) {
                 .top-nav {
                     flex-direction: column;
@@ -322,11 +265,6 @@
                 .section-card {
                     padding: 16px;
                 }
-                
-                .btn {
-                    width: 100%;
-                    justify-content: center;
-                }
             }
         </style>
         @stack('styles')
@@ -337,13 +275,19 @@
         <div class="main">
             <!-- Top Navigation Bar -->
             <nav class="top-nav" id="topNav">
-                <div class="nav-logo">{{ config('app.name', 'My App') }}</div>
+                <a href="{{ url('/') }}" class="nav-logo">{{ config('app.name', 'My App') }}</a>
             
                 <div class="nav-search">
                     <input type="text" class="search-input" placeholder="Search...">
                 </div>
                 
-               
+                <div class="nav-user">
+                    @auth
+                        <div class="user-avatar">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</div>
+                    @else
+                        <a href="{{ route('login') }}" class="btn btn-outline">Login</a>
+                    @endauth
+                </div>
             </nav>
 
             <!-- Page Content -->
@@ -352,9 +296,12 @@
             </main>
         </div>
 
+        <!-- JavaScript Libraries -->
         <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+        
+        <!-- Custom Scripts -->
         <script>
-            // Add scroll effect to navbar
+            // Navbar scroll effect
             window.addEventListener('scroll', function() {
                 const nav = document.getElementById('topNav');
                 if (window.scrollY > 10) {
@@ -364,14 +311,15 @@
                 }
             });
 
-            // Add ripple effect to buttons
+            // Button ripple effect (fixed to not break navigation)
             document.addEventListener('DOMContentLoaded', function() {
-                const buttons = document.querySelectorAll('.btn');
-                buttons.forEach(button => {
+                // Target only buttons without href attributes
+                document.querySelectorAll('.btn:not([href])').forEach(button => {
                     button.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        const x = e.clientX - e.target.getBoundingClientRect().left;
-                        const y = e.clientY - e.target.getBoundingClientRect().top;
+                        // Create ripple effect
+                        const rect = this.getBoundingClientRect();
+                        const x = e.clientX - rect.left;
+                        const y = e.clientY - rect.top;
                         
                         const ripple = document.createElement('span');
                         ripple.classList.add('ripple');
@@ -379,13 +327,28 @@
                         ripple.style.top = `${y}px`;
                         this.appendChild(ripple);
                         
-                        setTimeout(() => {
-                            ripple.remove();
-                        }, 1000);
+                        setTimeout(() => ripple.remove(), 600);
                     });
                 });
+
+                // Initialize Swiper if present
+                if (document.querySelector('.swiper-container')) {
+                    new Swiper('.swiper-container', {
+                        loop: true,
+                        autoplay: { delay: 5000 },
+                        pagination: { 
+                            el: '.swiper-pagination',
+                            clickable: true 
+                        },
+                        navigation: {
+                            nextEl: '.swiper-button-next',
+                            prevEl: '.swiper-button-prev',
+                        }
+                    });
+                }
             });
         </script>
+        
         @stack('scripts')
     </body>
 </html>
