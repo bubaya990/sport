@@ -6,12 +6,11 @@
 <div id="dashboardContent">
     <!-- Login Button at Top -->
     <div class="auth-buttons">
-@guest
- <a href="{{ route('login') }}" class="btn btn-primary">
-                    Log In
-                </a>
-                @endguest
-
+        @guest
+        <a href="{{ route('login') }}" class="btn btn-primary">
+            Log In
+        </a>
+        @endguest
     </div>
     
     <!-- Hero Section with Full-Width Swiper -->
@@ -122,33 +121,65 @@
                     <div class="contact-icon">📍</div>
                     <div>
                         <h4>Our Location</h4>
-                        <p>123 Event Street, Activity City</p>
+                        <p>{{ $aboutUs->address ?? '123 Event Street, Activity City' }}</p>
                     </div>
                 </div>
                 <div class="contact-item">
                     <div class="contact-icon">📧</div>
                     <div>
                         <h4>Email Us</h4>
-                        <p>support@eventmanager.com</p>
+                        <a href="mailto:{{ $aboutUs->email ?? 'support@eventmanager.com' }}" class="contact-link">{{ $aboutUs->email ?? 'support@eventmanager.com' }}</a>
                     </div>
                 </div>
                 <div class="contact-item">
                     <div class="contact-icon">📱</div>
                     <div>
                         <h4>Call Us</h4>
-                        <p>(123) 456-7890</p>
+                        <a href="tel:{{ $aboutUs->phone ?? '(123) 456-7890' }}" class="contact-link">{{ $aboutUs->phone ?? '(123) 456-7890' }}</a>
                     </div>
                 </div>
+                @if(isset($aboutUs->whatsapp) && $aboutUs->whatsapp)
+                <div class="contact-item">
+                    <div class="contact-icon whatsapp-icon">💬</div>
+                    <div>
+                        <h4>WhatsApp</h4>
+                        <a href="https://wa.me/{{ $aboutUs->whatsapp }}" target="_blank" class="contact-link">{{ $aboutUs->whatsapp }}</a>
+                    </div>
+                </div>
+                @endif
             </div>
             
             <div class="social-links">
                 <h4>Follow Us</h4>
                 <div class="social-icons">
-                    <a href="#" class="social-link facebook">f</a>
-                    <a href="#" class="social-link twitter">𝕏</a>
-                    <a href="#" class="social-link instagram">📷</a>
-                    <a href="#" class="social-link youtube">▶️</a>
+                    @if(isset($aboutUs->facebook_url) && $aboutUs->facebook_url)
+                    <a href="{{ $aboutUs->facebook_url }}" target="_blank" class="social-link facebook">f</a>
+                    @endif
+                    
+                    @if(isset($aboutUs->twitter_url) && $aboutUs->twitter_url)
+                    <a href="{{ $aboutUs->twitter_url }}" target="_blank" class="social-link twitter">𝕏</a>
+                    @endif
+                    
+                    @if(isset($aboutUs->instagram_url) && $aboutUs->instagram_url)
+                    <a href="{{ $aboutUs->instagram_url }}" target="_blank" class="social-link instagram">📷</a>
+                    @endif
+                    
+                    @if(isset($aboutUs->linkedin_url) && $aboutUs->linkedin_url)
+                    <a href="{{ $aboutUs->linkedin_url }}" target="_blank" class="social-link linkedin">in</a>
+                    @endif
+                    
+                    @if(isset($aboutUs->youtube_url) && $aboutUs->youtube_url)
+                    <a href="{{ $aboutUs->youtube_url }}" target="_blank" class="social-link youtube">▶️</a>
+                    @endif
                 </div>
+                
+                @if(isset($aboutUs->map_link) && $aboutUs->map_link)
+                <div class="map-link">
+                    <a href="{{ $aboutUs->map_link }}" target="_blank" class="btn btn-outline map-btn">
+                        📍 View on Map
+                    </a>
+                </div>
+                @endif
             </div>
         </div>
     </div>
@@ -504,6 +535,22 @@
         color: var(--primary);
     }
     
+    .whatsapp-icon {
+        background: rgba(37, 211, 102, 0.2);
+        color: #25d366;
+    }
+    
+    .contact-link {
+        color: var(--primary);
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+    
+    .contact-link:hover {
+        color: var(--primary-dark);
+        text-decoration: underline;
+    }
+    
     .social-links h4 {
         margin: 0 0 15px;
         font-size: 16px;
@@ -513,6 +560,7 @@
     .social-icons {
         display: flex;
         gap: 15px;
+        margin-bottom: 20px;
     }
     
     .social-link {
@@ -535,7 +583,27 @@
     .facebook { background: #1877f2; }
     .twitter { background: #1da1f2; }
     .instagram { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+    .linkedin { background: #2867B2; }
     .youtube { background: #ff0000; }
+    
+    .map-link {
+        margin-top: 15px;
+    }
+    
+    .map-btn {
+        padding: 10px 20px;
+        border-radius: 6px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        background: transparent;
+        color: var(--primary);
+        border: 2px solid var(--primary);
+    }
+    
+    .map-btn:hover {
+        background: rgba(0, 200, 215, 0.1);
+    }
     
     /* Empty States */
     .no-events {
@@ -594,6 +662,11 @@
         .auth-buttons {
             top: 10px;
             right: 10px;
+        }
+        
+        .social-icons {
+            flex-wrap: wrap;
+            justify-content: center;
         }
     }
 </style>
