@@ -7,47 +7,50 @@
 <!-- Sidebar -->
 <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
-        <h2>My App</h2>
+        <h2>{{ config('app.name', 'My App') }}</h2>
     </div>
     
     <div class="sidebar-nav">
         <div class="nav-section">
             <div class="nav-section-title">Main</div>
-            <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">Dashboard</a>
-             <a href="{{ route('aboutus.index') }}">About us</a>
-
-            
+            <a href="{{ route('site.dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                Visitor Dashboard
+            </a>
+            <a href="{{ route('aboutus.index') }}">About us</a>
             <a href="{{ route('evenements.index') }}" class="{{ request()->routeIs('evenements.*') ? 'active' : '' }}">Our events</a>
         </div>
-        
-        
     </div>
     
     <div class="sidebar-footer">
+        @auth
         <form id="logoutForm" action="{{ route('logout') }}" method="POST">
             @csrf
             <button type="submit" class="logout-btn">
                 Logout
             </button>
         </form>
+        @else
+        <a href="{{ route('login') }}" class="login-btn">
+            Login
+        </a>
+        @endauth
     </div>
 </aside>
 
 <style>
-    /* Sidebar Styles */
+    /* Sidebar Styles - Updated for overlay behavior */
     .sidebar {
         width: 250px;
         background: linear-gradient(180deg, #081825 0%, #1a2332 50%, #0a1420 100%);
         color: white;
         padding: 0;
         position: fixed;
-        left: 0;
+        left: -250px; /* Changed from left: 0 */
         top: 0;
         height: 100vh;
-        transform: translateX(-100%);
         transition: transform 0.3s ease;
         z-index: 1000;
-        box-shadow: 4px 0 20px rgba(0, 140, 150, 0.2);
+        box-shadow: 4px 0 20px rgba(0, 140, 150, 0.4);
         display: flex;
         flex-direction: column;
         overflow: hidden;
@@ -55,7 +58,7 @@
     }
 
     .sidebar.open {
-        transform: translateX(0);
+        transform: translateX(250px); /* Changed from translateX(0) */
     }
 
     .sidebar-header {
@@ -119,10 +122,10 @@
         background: rgba(26, 35, 50, 0.6);
     }
 
-    .logout-btn {
+    .logout-btn, .login-btn {
         display: flex;
         align-items: center;
-        color: #fed7d7;
+        color: #d1d5db;
         text-decoration: none;
         padding: 12px 15px;
         border-radius: 12px;
@@ -130,12 +133,14 @@
         font-weight: 500;
         gap: 12px;
         width: 100%;
-        background: linear-gradient(135deg, rgba(185, 28, 28, 0.2), rgba(220, 38, 38, 0.2));
-        border: 1px solid rgba(185, 28, 28, 0.3);
+        background: linear-gradient(135deg, rgba(0, 140, 150, 0.2), rgba(26, 100, 140, 0.15));
+        border: 1px solid rgba(0, 140, 150, 0.3);
+        cursor: pointer;
+        border: none;
     }
 
-    .logout-btn:hover {
-        background: linear-gradient(135deg, rgba(185, 28, 28, 0.3), rgba(220, 38, 38, 0.3));
+    .logout-btn:hover, .login-btn:hover {
+        background: linear-gradient(135deg, rgba(0, 140, 150, 0.3), rgba(26, 100, 140, 0.25));
         color: #ffffff;
     }
 
@@ -161,7 +166,9 @@
     }
 
     .toggle-btn.hidden {
-        display: none;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
     }
 
     /* Overlay */
@@ -183,37 +190,3 @@
         visibility: visible;
     }
 </style>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const toggleBtn = document.getElementById('toggleBtn');
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.getElementById('overlay');
-        const mainContent = document.querySelector('.main');
-
-        // Close sidebar when clicking on overlay or main content
-        function closeSidebar() {
-            sidebar.classList.remove('open');
-            overlay.classList.remove('active');
-            toggleBtn.classList.remove('hidden');
-        }
-
-        // Toggle sidebar when button is clicked
-        toggleBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            sidebar.classList.add('open');
-            overlay.classList.add('active');
-            toggleBtn.classList.add('hidden');
-        });
-
-        // Close sidebar when clicking on overlay
-        overlay.addEventListener('click', closeSidebar);
-
-        // Close sidebar when clicking on main content
-        mainContent.addEventListener('click', function() {
-            if (sidebar.classList.contains('open')) {
-                closeSidebar();
-            }
-        });
-    });
-</script>

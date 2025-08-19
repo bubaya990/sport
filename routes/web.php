@@ -40,6 +40,7 @@ Route::get('/dashboard', [\App\Http\Controllers\SiteController::class, 'dashboar
 
 
 // Public show route
+Route::get('/evenements/add', [EvenementController::class, 'create'])->name('evenements.add');
 Route::get('evenements/{evenement}', [EvenementController::class, 'show'])
     ->name('evenements.show');
 
