@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AboutUsController;
 use App\Http\Controllers\ParticipantController;
 use App\Http\Controllers\EvenementController;
 use Illuminate\Support\Facades\Auth;
@@ -37,7 +38,10 @@ Route::post('/inscription', [ParticipantController::class, 'store'])->name('part
 Route::get('/dashboard', [\App\Http\Controllers\SiteController::class, 'dashboard'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard'); // 👈 important
+// About Us Management
 
+        Route::get('/about-us/edit', [AboutUsController::class, 'edit'])->name('aboutus.edit');
+        Route::put('/about-us', [AboutUsController::class, 'update'])->name('aboutus.update');
 
 // Public show route
 Route::get('/evenements/add', [EvenementController::class, 'create'])->name('evenements.add');

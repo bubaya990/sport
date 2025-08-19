@@ -29,10 +29,7 @@
                 Logout
             </button>
         </form>
-        @else
-        <a href="{{ route('login') }}" class="login-btn">
-            Login
-        </a>
+      
         @endauth
     </div>
 </aside>
