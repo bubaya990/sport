@@ -34,31 +34,7 @@ class AboutUs extends Model
         'gallery' => 'array'
     ];
 
-    // Accessor for main image URL
-    public function getMainImageUrlAttribute()
-    {
-        if (!$this->main_image) {
-            return asset('images/default-about.jpg');
-        }
-        
-        return Storage::disk('public')->exists($this->main_image)
-            ? Storage::disk('public')->url($this->main_image)
-            : asset('images/default-about.jpg');
-    }
-
-    // Accessor for gallery images URLs
-    public function getGalleryUrlsAttribute()
-    {
-        if (empty($this->gallery)) {
-            return [];
-        }
-
-        return array_map(function($image) {
-            return Storage::disk('public')->exists($image)
-                ? Storage::disk('public')->url($image)
-                : asset('images/default-gallery.jpg');
-        }, $this->gallery);
-    }
+    
 
     // Method to get social links as an array
     public function socialLinks()
@@ -91,5 +67,34 @@ class AboutUs extends Model
         });
     }
 
+
+    // In AboutUs model
+public function getMainImageUrlAttribute()
+{
+    if (!$this->main_image) {
+        return asset('images/default-about.jpg');
+    }
+    
+    // Check if the file exists using the correct path
+    $path = 'storage/' . $this->main_image;
+    
+    return file_exists(public_path($path)) 
+        ? asset($path)
+        : asset('images/default-about.jpg');
+}
+
+public function getGalleryUrlsAttribute()
+{
+    if (empty($this->gallery)) {
+        return [];
+    }
+
+    return array_map(function($image) {
+        $path = 'storage/' . $image;
+        return file_exists(public_path($path))
+            ? asset($path)
+            : asset('images/default-gallery.jpg');
+    }, $this->gallery);
+}
     
 }

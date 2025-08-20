@@ -9,7 +9,7 @@
             <div class="section-icon">🎯</div>
             <h2 class="section-title">Manage Events</h2>
             @if(Auth::check() && Auth::user()->isAdmin())
-                <a href="{{ route('evenements.create') }}" class="btn btn-success">
+                <a href="{{ route('evenements.add') }}" class="btn btn-success">
                     <i class="fas fa-plus"></i> Add New Event
                 </a>
             @endif
