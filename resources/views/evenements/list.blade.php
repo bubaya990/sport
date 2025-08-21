@@ -9,7 +9,7 @@
             <div class="section-icon">🎯</div>
             <h2 class="section-title">Manage Events</h2>
             @if(Auth::check() && Auth::user()->isAdmin())
-                <a href="{{ route('evenements.add') }}" class="btn btn-success">
+                <a href="{{ route('evenements.add') }}" class="btn btn-primary">
                     <i class="fas fa-plus"></i> Add New Event
                 </a>
             @endif
@@ -30,51 +30,53 @@
             <div class="events-grid">
                 @foreach($evenements as $evenement)
                 <div class="event-card" data-status="{{ $evenement->status }}">
-                    @if($evenement->images && count($evenement->images) > 0)
-                    <div class="event-image-container">
-                        <img src="{{ asset('storage/'.$evenement->images[0]) }}" class="event-image" alt="{{ $evenement->titre }}">
-                        <div class="event-image-overlay"></div>
-                    </div>
-                    @else
-                    <div class="event-image-placeholder">
-                        <i class="fas fa-image"></i>
-                        <span>No Image Available</span>
-                    </div>
-                    @endif
-                    
-                    <div class="event-details">
-                        <div class="event-meta">
-                            <div class="event-date">
-                                <i class="far fa-calendar-alt"></i>
-                                {{ $evenement->date->format('M d, Y') }}
-                                @if($evenement->end_date)
-                                    <span class="date-separator">-</span>
-                                    {{ $evenement->end_date->format('M d, Y') }}
-                                @endif
-                            </div>
-                            <div class="event-status status-{{ $evenement->status }}">
-                                {{ ucfirst($evenement->status) }}
-                            </div>
+                    <div class="event-card-content" onclick="window.location='{{ route('evenements.show', $evenement->id) }}'">
+                        @if($evenement->images && count($evenement->images) > 0)
+                        <div class="event-image-container">
+                            <img src="{{ asset('storage/'.$evenement->images[0]) }}" class="event-image" alt="{{ $evenement->titre }}">
+                            <div class="event-image-overlay"></div>
                         </div>
-                        
-                        <h3 class="event-title">{{ $evenement->titre }}</h3>
-                        <p class="event-desc">{{ Str::limit($evenement->description, 100) }}</p>
-                        
-                        @if(Auth::check() && Auth::user()->isAdmin())
-                            <div class="event-actions">
-                                <a href="{{ route('evenements.edit', $evenement->id) }}" class="btn btn-warning btn-small">
-                                    <i class="fas fa-edit"></i> Edit
-                                </a>
-                                <form action="{{ route('evenements.destroy', $evenement->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this event?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-small">
-                                        <i class="fas fa-trash-alt"></i> Delete
-                                    </button>
-                                </form>
-                            </div>
+                        @else
+                        <div class="event-image-placeholder">
+                            <i class="fas fa-image"></i>
+                            <span>No Image Available</span>
+                        </div>
                         @endif
+                        
+                        <div class="event-details">
+                            <div class="event-meta">
+                                <div class="event-date">
+                                    <i class="far fa-calendar-alt"></i>
+                                    {{ $evenement->date->format('M d, Y') }}
+                                    @if($evenement->end_date)
+                                        <span class="date-separator">-</span>
+                                        {{ $evenement->end_date->format('M d, Y') }}
+                                    @endif
+                                </div>
+                                <div class="event-status status-{{ $evenement->status }}">
+                                    {{ ucfirst($evenement->status) }}
+                                </div>
+                            </div>
+                            
+                            <h3 class="event-title">{{ $evenement->titre }}</h3>
+                            <p class="event-desc">{{ Str::limit($evenement->description, 100) }}</p>
+                        </div>
                     </div>
+                    
+                    @if(Auth::check() && Auth::user()->isAdmin())
+                        <div class="event-actions">
+                            <a href="{{ route('evenements.edit', $evenement->id) }}" class="btn btn-outline btn-small">
+                                <i class="fas fa-edit"></i> Edit
+                            </a>
+                            <form action="{{ route('evenements.destroy', $evenement->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this event?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-small">
+                                    <i class="fas fa-trash-alt"></i> Delete
+                                </button>
+                            </form>
+                        </div>
+                    @endif
                 </div>
                 @endforeach
             </div>
@@ -104,6 +106,8 @@
             transition: all 0.3s ease;
             border: 1px solid var(--card-border);
             position: relative;
+            display: flex;
+            flex-direction: column;
         }
 
         .event-card:hover {
@@ -122,6 +126,11 @@
 
         .event-card[data-status="scheduled"] {
             border-left: 4px solid var(--primary);
+        }
+
+        .event-card-content {
+            cursor: pointer;
+            flex-grow: 1;
         }
 
         .event-image-container {
@@ -233,13 +242,26 @@
         .event-actions {
             display: flex;
             gap: 10px;
+            padding: 0 16px 16px;
+            margin-top: auto;
         }
 
-        .event-actions .btn {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 13px;
+        .btn-small {
+            padding: 8px 12px;
+            font-size: 12px;
+            border-radius: 6px;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger), #dc2626);
+            color: white;
+            border: none;
+        }
+
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #dc2626, var(--danger));
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(239, 68, 68, 0.3);
         }
 
         /* Empty State */
@@ -318,6 +340,10 @@
                 width: 100%;
                 justify-content: center;
             }
+            
+            .event-actions {
+                flex-direction: column;
+            }
         }
     </style>
 
@@ -325,7 +351,6 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Enhanced hover effects
             const eventCards = document.querySelectorAll('.event-card');
-          
             
             eventCards.forEach(card => {
                 const img = card.querySelector('.event-image');
@@ -341,6 +366,26 @@
                     if (img) img.style.transform = 'scale(1)';
                     if (overlay) overlay.style.opacity = '0';
                     this.style.boxShadow = 'none';
+                });
+            });
+            
+            // Add ripple effect to buttons
+            document.querySelectorAll('.btn').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    // Prevent the event card click when clicking buttons
+                    e.stopPropagation();
+                    
+                    const rect = this.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    const ripple = document.createElement('span');
+                    ripple.classList.add('ripple');
+                    ripple.style.left = `${x}px`;
+                    ripple.style.top = `${y}px`;
+                    this.appendChild(ripple);
+                    
+                    setTimeout(() => ripple.remove(), 600);
                 });
             });
         });

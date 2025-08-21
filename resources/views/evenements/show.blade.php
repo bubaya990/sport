@@ -10,24 +10,31 @@
             </div>
             <h2 class="section-title">{{ $evenement->titre }}</h2>
             
-            @if(auth()->check() && auth()->user()->role === 'admin')
-                <div class="admin-actions">
-                    <a href="{{ route('evenements.edit', $evenement->id) }}" 
-                       class="btn btn-warning">
-                        <i class="fas fa-edit me-1"></i> Edit
-                    </a>
-                    <form action="{{ route('evenements.destroy', $evenement->id) }}" 
-                          method="POST" 
-                          class="d-inline"
-                          onsubmit="return confirm('Are you sure you want to delete this event?')">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger">
-                            <i class="fas fa-trash me-1"></i> Delete
-                        </button>
-                    </form>
-                </div>
-            @endif
+            <!-- Back button moved to top-right -->
+            <div class="top-actions">
+                <a href="{{ route('evenements.index') }}" class="btn btn-outline">
+                    <i class="fas fa-arrow-left"></i> Back to Events
+                </a>
+                
+                @if(auth()->check() && auth()->user()->role === 'admin')
+                    <div class="admin-actions">
+                        <a href="{{ route('evenements.edit', $evenement->id) }}" 
+                           class="btn btn-outline">
+                            <i class="fas fa-edit"></i> Edit
+                        </a>
+                        <form action="{{ route('evenements.destroy', $evenement->id) }}" 
+                              method="POST" 
+                              class="d-inline"
+                              onsubmit="return confirm('Are you sure you want to delete this event?')">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </form>
+                    </div>
+                @endif
+            </div>
         </div>
 
         <div class="event-detail">
@@ -40,7 +47,7 @@
             @endif
 
             <div class="event-meta">
-                <div class="event-status {{ $evenement->status }}">
+                <div class="event-status status-{{ $evenement->status }}">
                     {{ ucfirst($evenement->status) }}
                 </div>
                 
@@ -80,12 +87,6 @@
                     </div>
                 </div>
             @endif
-
-            <div class="back-button">
-                <a href="{{ route('evenements.index') }}" class="btn btn-outline">
-                    <i class="fas fa-arrow-left me-1"></i> Back to Events
-                </a>
-            </div>
         </div>
     </div>
 
@@ -134,6 +135,28 @@
             color: var(--primary);
         }
 
+        .event-status {
+            font-size: 14px;
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        .status-scheduled {
+            background: rgba(0, 200, 215, 0.2);
+            color: var(--primary);
+        }
+
+        .status-ongoing {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--warning);
+        }
+
+        .status-completed {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+        }
+
         .event-description {
             margin-bottom: 30px;
         }
@@ -177,14 +200,57 @@
             transform: scale(1.05);
         }
 
+        /* Top actions container */
+        .top-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-left: auto;
+        }
+
         .admin-actions {
             display: flex;
             gap: 10px;
         }
 
-        .back-button {
-            margin-top: 30px;
-            text-align: center;
+        /* Button styles to match the app */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+            border: none;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: rgba(0, 200, 215, 0.1);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger), #dc2626);
+            color: white;
+            border: none;
+        }
+
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #dc2626, var(--danger));
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(239, 68, 68, 0.3);
         }
 
         @media (max-width: 768px) {
@@ -205,6 +271,50 @@
             .image-grid {
                 grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             }
+            
+            .top-actions {
+                flex-direction: column;
+                width: 100%;
+                margin-top: 15px;
+                margin-left: 0;
+            }
+            
+            .admin-actions {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .admin-actions .btn,
+            .top-actions .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
         }
     </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add ripple effect to buttons
+            document.querySelectorAll('.btn').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    const rect = this.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    const ripple = document.createElement('span');
+                    ripple.classList.add('ripple');
+                    ripple.style.left = `${x}px`;
+                    ripple.style.top = `${y}px`;
+                    this.appendChild(ripple);
+                    
+                    setTimeout(() => ripple.remove(), 600);
+                });
+            });
+        });
+    </script>
 @endsection

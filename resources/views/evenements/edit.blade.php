@@ -47,16 +47,25 @@
                 </div>
             </div>
 
-            <div class="form-group">
-                <label>Status</label>
-                <select name="status" class="form-input" required>
-                    <option value="scheduled" {{ old('status', $evenement->status) == 'scheduled' ? 'selected' : '' }}>Scheduled</option>
-                    <option value="ongoing" {{ old('status', $evenement->status) == 'ongoing' ? 'selected' : '' }}>Ongoing</option>
-                    <option value="completed" {{ old('status', $evenement->status) == 'completed' ? 'selected' : '' }}>Completed</option>
-                </select>
-                @error('status')
-                    <span class="text-danger">{{ $message }}</span>
-                @enderror
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Price (DH)</label>
+                    <input type="number" name="prix" value="{{ old('prix', $evenement->prix) }}" class="form-input" step="0.01" min="0">
+                    @error('prix')
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
+                </div>
+                <div class="form-group">
+                    <label>Status</label>
+                    <select name="status" class="form-input" required>
+                        <option value="scheduled" {{ old('status', $evenement->status) == 'scheduled' ? 'selected' : '' }}>Scheduled</option>
+                        <option value="ongoing" {{ old('status', $evenement->status) == 'ongoing' ? 'selected' : '' }}>Ongoing</option>
+                        <option value="completed" {{ old('status', $evenement->status) == 'completed' ? 'selected' : '' }}>Completed</option>
+                    </select>
+                    @error('status')
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
+                </div>
             </div>
 
             @if($evenement->images && count($evenement->images) > 0)
@@ -88,7 +97,7 @@
 
             <div class="form-actions">
                 <button type="submit" class="btn btn-primary">Update Event</button>
-                <a href="{{ route('evenements.index') }}" class="btn btn-secondary">Cancel</a>
+                <a href="{{ route('evenements.index') }}" class="btn btn-outline">Cancel</a>
             </div>
         </form>
     </div>
@@ -170,10 +179,15 @@
             position: absolute;
             top: -8px;
             right: -8px;
-            padding: 2px 6px;
+            width: 20px;
+            height: 20px;
+            padding: 0;
             border-radius: 50%;
             font-size: 12px;
             line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .text-danger {
@@ -181,6 +195,76 @@
             font-size: 12px;
             margin-top: 5px;
             display: block;
+        }
+        
+        /* Button styles to match the app */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+            border: none;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 200, 215, 0.3);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background: rgba(0, 200, 215, 0.1);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger), #dc2626);
+            color: white;
+            border: none;
+        }
+        
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #dc2626, var(--danger));
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(239, 68, 68, 0.3);
+        }
+        
+        .btn-small {
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+        
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+            
+            .form-actions .btn {
+                width: 100%;
+                justify-content: center;
+            }
         }
     </style>
 
@@ -214,5 +298,24 @@
                 existingImagesInput.remove();
             }
         }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add ripple effect to buttons
+            document.querySelectorAll('.btn').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    const rect = this.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    const ripple = document.createElement('span');
+                    ripple.classList.add('ripple');
+                    ripple.style.left = `${x}px`;
+                    ripple.style.top = `${y}px`;
+                    this.appendChild(ripple);
+                    
+                    setTimeout(() => ripple.remove(), 600);
+                });
+            });
+        });
     </script>
 @endsection
