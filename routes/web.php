@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AboutUsController;
 use App\Http\Controllers\ParticipantController;
 use App\Http\Controllers\EvenementController;
+use App\Http\Controllers\PaymentController;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -72,5 +73,11 @@ Route::resource('evenements', EvenementController::class);
 // OR if you want to define it manually
 Route::get('/evenements', [EvenementController::class, 'index'])->name('evenements.index');
 
+
+
+// Payment routes
+Route::get('/payment/{event?}', [PaymentController::class, 'index'])->name('payment.form');
+Route::post('/payment/process', [PaymentController::class, 'processPayment'])->name('payment.process');
+Route::get('/payment/success/{id}', [PaymentController::class, 'success'])->name('payment.success');
 
 require __DIR__.'/auth.php';

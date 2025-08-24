@@ -43,9 +43,9 @@
                                 </div>
                                 <div class="hero-actions">
                                     <a href="{{ route('evenements.show', $event->id) }}" class="btn btn-outline">See Details</a>
-                                    @guest
-                                    <a href="#" class="btn btn-primary">Inscription</a>
-                                    @endguest
+                               
+                        <a href="{{ route('payment.form', $event->id) }}" class="btn btn-primary">Inscription</a>
+                                  
                                 </div>
                             </div>
                         </div>
@@ -90,9 +90,6 @@
                     <p class="event-description">{{ Str::limit($event->description, 100) }}</p>
                     <div class="event-actions">
                         <a href="{{ route('evenements.show', $event->id) }}" class="btn btn-outline">See Event</a>
-                        @guest
-                        <a href="#" class="btn btn-primary">Inscription</a>
-                        @endguest
                     </div>
                 </div>
             </div>
