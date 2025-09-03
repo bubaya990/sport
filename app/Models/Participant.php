@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Participant extends Model
 {
     protected $fillable = [
-        'nom', 'prenom', 'telephone', 'adresse', 'date_naissance', 'ville', 'profession'
+        'nom', 'prenom', 'telephone', 'adresse', 'date_naissance', 'ville', 'email', 'sexe'
+        // Removed 'profession' and added 'email', 'sexe'
     ];
 
     public function paiements(): HasMany

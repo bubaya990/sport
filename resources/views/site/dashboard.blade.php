@@ -5,13 +5,7 @@
 @section('content')
 <div id="dashboardContent">
     <!-- Login Button at Top -->
-    <div class="auth-buttons">
-        @guest
-        <a href="{{ route('login') }}" class="btn btn-primary">
-            Log In
-        </a>
-        @endguest
-    </div>
+   
     
     <!-- Hero Section with Full-Width Swiper -->
     <div class="hero-section">

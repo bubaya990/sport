@@ -72,10 +72,18 @@
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="telephone" class="form-label">Téléphone *</label>
-                    <input type="tel" name="telephone" id="telephone" class="form-input" 
-                           value="{{ old('telephone') }}" required>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="email" class="form-label">Email *</label>
+                        <input type="email" name="email" id="email" class="form-input" 
+                               value="{{ old('email') }}" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="telephone" class="form-label">Téléphone *</label>
+                        <input type="tel" name="telephone" id="telephone" class="form-input" 
+                               value="{{ old('telephone') }}" required>
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -98,10 +106,27 @@
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="profession" class="form-label">Profession *</label>
-                    <input type="text" name="profession" id="profession" class="form-input" 
-                           value="{{ old('profession') }}" required>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="sexe" class="form-label">Sexe *</label>
+                        <select name="sexe" id="sexe" class="form-select" required>
+                            <option value="">Sélectionnez votre sexe</option>
+                            <option value="homme" {{ old('sexe') == 'homme' ? 'selected' : '' }}>Homme</option>
+                            <option value="femme" {{ old('sexe') == 'femme' ? 'selected' : '' }}>Femme</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="taille_maillot" class="form-label">Taille de maillot *</label>
+                        <select name="taille_maillot" id="taille_maillot" class="form-select" required>
+                            <option value="">Sélectionnez votre taille</option>
+                            <option value="S" {{ old('taille_maillot') == 'S' ? 'selected' : '' }}>S</option>
+                            <option value="M" {{ old('taille_maillot') == 'M' ? 'selected' : '' }}>M</option>
+                            <option value="L" {{ old('taille_maillot') == 'L' ? 'selected' : '' }}>L</option>
+                            <option value="XL" {{ old('taille_maillot') == 'XL' ? 'selected' : '' }}>XL</option>
+                            <option value="XXL" {{ old('taille_maillot') == 'XXL' ? 'selected' : '' }}>XXL</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 

@@ -39,11 +39,13 @@ class PaymentController extends Controller
             'evenement_id' => 'required|exists:evenements,id',
             'nom' => 'required|string|max:255',
             'prenom' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
             'telephone' => 'required|string|max:20',
             'adresse' => 'required|string|max:500',
             'date_naissance' => 'required|date',
             'ville' => 'required|string|max:255',
-            'profession' => 'required|string|max:255',
+            'sexe' => 'required|in:homme,femme',
+            'taille_maillot' => 'required|in:S,M,L,XL,XXL',
             'type_paiement' => 'required|in:visa,poste,carte_dor',
         ]);
 
@@ -64,11 +66,13 @@ class PaymentController extends Controller
             $participant = Participant::create([
                 'nom' => $request->nom,
                 'prenom' => $request->prenom,
+                'email' => $request->email,
                 'telephone' => $request->telephone,
                 'adresse' => $request->adresse,
                 'date_naissance' => $request->date_naissance,
                 'ville' => $request->ville,
-                'profession' => $request->profession,
+                'sexe' => $request->sexe,
+                'taille_maillot' => $request->taille_maillot,
             ]);
         }
 

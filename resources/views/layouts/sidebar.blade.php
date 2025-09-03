@@ -17,6 +17,7 @@
                 Visitor Dashboard
             </a>
             <a href="{{ route('aboutus.index') }}">About us</a>
+            <a href="{{ route('participants.index') }}">participants</a>
             <a href="{{ route('evenements.index') }}" class="{{ request()->routeIs('evenements.*') ? 'active' : '' }}">Our events</a>
         </div>
     </div>

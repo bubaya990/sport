@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Participant;
+use Carbon\Carbon;
 
 class ParticipantSeeder extends Seeder
 {
@@ -17,7 +18,8 @@ class ParticipantSeeder extends Seeder
                 'adresse' => 'Rue 12, Alger',
                 'date_naissance' => '1995-06-12',
                 'ville' => 'Alger',
-                'profession' => 'Ingénieur',
+                'email' => 'karim.bennani@example.com',
+                'sexe' => 'homme',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -28,7 +30,8 @@ class ParticipantSeeder extends Seeder
                 'adresse' => 'Rue 8, Oran',
                 'date_naissance' => '1992-04-05',
                 'ville' => 'Oran',
-                'profession' => 'Professeur',
+                'email' => 'nadia.zerrouki@example.com',
+                'sexe' => 'femme',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -39,7 +42,8 @@ class ParticipantSeeder extends Seeder
                 'adresse' => 'Rue 3, Constantine',
                 'date_naissance' => '2000-09-21',
                 'ville' => 'Constantine',
-                'profession' => 'Étudiant',
+                'email' => 'yacine.belaid@example.com',
+                'sexe' => 'homme',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

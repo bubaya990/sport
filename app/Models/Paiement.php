@@ -25,4 +25,9 @@ class Paiement extends Model
     {
         return $this->belongsTo(Evenement::class);
     }
+
+     public function paiements()
+    {
+        return $this->hasMany(Paiement::class);
+    }
 }
