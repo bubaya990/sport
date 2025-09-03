@@ -20,6 +20,10 @@ return new class extends Migration
             $table->enum('sexe', ['homme', 'femme'])->nullable(); // Added sexe as enum
             $table->timestamps();
         });
+           Schema::table('participants', function (Blueprint $table) {
+            $table->enum('size', ['XS', 'S', 'M', 'L', 'XL', 'XXL'])->nullable()->after('sexe');
+        });
+    
     }
 
     public function down(): void

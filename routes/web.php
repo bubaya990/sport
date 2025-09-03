@@ -32,6 +32,7 @@ Route::middleware(['auth'])->group(function () {
     // Admin can manage participants
     Route::get('/admin/participants', [ParticipantController::class, 'index'])->name('participants.index');
 });
+Route::resource('participants', ParticipantController::class)->middleware('auth');
 
 Route::get('/inscription', [ParticipantController::class, 'create'])->name('participants.create');
 Route::post('/inscription', [ParticipantController::class, 'store'])->name('participants.store');

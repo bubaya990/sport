@@ -7,9 +7,15 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Participant extends Model
 {
-    protected $fillable = [
-        'nom', 'prenom', 'telephone', 'adresse', 'date_naissance', 'ville', 'email', 'sexe'
-        // Removed 'profession' and added 'email', 'sexe'
+     protected $fillable = [
+        'nom', 'prenom', 'telephone', 'adresse', 'date_naissance', 
+        'ville', 'email', 'sexe', 'size'
+    ];
+
+  
+
+    protected $casts = [
+        'date_naissance' => 'date',
     ];
 
     public function paiements(): HasMany
