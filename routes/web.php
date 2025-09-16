@@ -76,9 +76,22 @@ Route::get('/evenements', [EvenementController::class, 'index'])->name('evenemen
 
 
 
-// Payment routes
+/*  
 Route::get('/payment/{event?}', [PaymentController::class, 'index'])->name('payment.form');
 Route::post('/payment/process', [PaymentController::class, 'processPayment'])->name('payment.process');
+Route::get('/payment/success/{id}', [PaymentController::class, 'success'])->name('payment.success');*/
+
+
+
+
+Route::get('/payment/{eventId?}', [PaymentController::class, 'index'])->name('payment.index');
+Route::post('/payment/process', [PaymentController::class, 'processPayment'])->name('payment.process');
 Route::get('/payment/success/{id}', [PaymentController::class, 'success'])->name('payment.success');
+Route::get('/payment/error', [PaymentController::class, 'error'])->name('payment.error');
+
+// Mock SATIM return routes (simulate bank redirect)
+Route::get('/payment/mock/satim/success/{id}', [PaymentController::class, 'mockSatimSuccess'])->name('payment.mock.success');
+Route::get('/payment/mock/satim/error/{id}', [PaymentController::class, 'mockSatimError'])->name('payment.mock.error');
+
 
 require __DIR__.'/auth.php';

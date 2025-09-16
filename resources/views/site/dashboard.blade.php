@@ -38,7 +38,7 @@
                                 <div class="hero-actions">
                                     <a href="{{ route('evenements.show', $event->id) }}" class="btn btn-outline">See Details</a>
                                
-                        <a href="{{ route('payment.form', $event->id) }}" class="btn btn-primary">Inscription</a>
+                                    <a href="{{ route('payment.index', $event->id) }}" class="btn btn-primary">Inscription</a>
                                   
                                 </div>
                             </div>
