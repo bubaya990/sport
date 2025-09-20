@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Participant;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class ParticipantController extends Controller
 {
-    public function index(Request $request)
+     public function index(Request $request)
     {
         $query = Participant::query();
         
@@ -38,17 +39,21 @@ class ParticipantController extends Controller
             $query->where('ville', $request->ville);
         }
         
-        // Age range filter
+        // Age range filter - FIXED
         if ($request->has('age_range') && !empty($request->age_range)) {
             $ageRange = $request->age_range;
-            $now = now();
+            $today = Carbon::today();
             
             if ($ageRange === '60+') {
-                $query->where('date_naissance', '<=', $now->subYears(60)->format('Y-m-d'));
+                $sixtyYearsAgo = $today->copy()->subYears(60);
+                $query->where('date_naissance', '<=', $sixtyYearsAgo->format('Y-m-d'));
             } else {
                 list($minAge, $maxAge) = explode('-', $ageRange);
-                $minDate = $now->subYears($maxAge + 1)->addDay()->format('Y-m-d');
-                $maxDate = $now->subYears($minAge)->format('Y-m-d');
+                
+                // Calculate the date range correctly
+                $minDate = $today->copy()->subYears($maxAge + 1)->addDay()->format('Y-m-d');
+                $maxDate = $today->copy()->subYears($minAge)->format('Y-m-d');
+                
                 $query->whereBetween('date_naissance', [$minDate, $maxDate]);
             }
         }
@@ -65,6 +70,7 @@ class ParticipantController extends Controller
         
         return view('participants.index', compact('participants', 'villes'));
     }
+    
     
     public function show(Participant $participant)
     {

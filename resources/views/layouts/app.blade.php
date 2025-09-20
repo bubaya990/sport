@@ -24,7 +24,7 @@
             --warning: #f59e0b;
             --danger: #ef4444;
             --light: #f1f5f9;
-            --dark: #0f172a;
+            --dark: #374668ff;
             --darker: #020617;
             --text: #e2e8f0;
             --text-secondary: #94a3b8;
@@ -54,7 +54,7 @@
         .main {
             flex-grow: 1;
             padding: 20px;
-            background: linear-gradient(135deg, #1a2332 0%, #2d3748 50%, #374151 100%);
+            background: linear-gradient(135deg, #404e68ff 0%, #4d6691ff 50%, #374151 100%);
             width: 100%;
             min-height: 100vh;
             position: relative;
