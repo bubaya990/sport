@@ -317,89 +317,38 @@
             }
         });
 
-        // Sidebar toggle functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            const toggleBtn = document.getElementById('toggleBtn');
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('overlay');
-            const body = document.body;
-
-            function openSidebar() {
-                sidebar.classList.add('open');
-                overlay.classList.add('active');
-                toggleBtn.classList.add('hidden');
-                body.classList.add('sidebar-open');
-            }
-
-            function closeSidebar() {
-                sidebar.classList.remove('open');
-                overlay.classList.remove('active');
-                toggleBtn.classList.remove('hidden');
-                body.classList.remove('sidebar-open');
-            }
-
-            // Toggle sidebar when button is clicked
-            toggleBtn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                if (sidebar.classList.contains('open')) {
-                    closeSidebar();
-                } else {
-                    openSidebar();
-                }
+        // Button ripple effect
+        document.querySelectorAll('.btn:not([href])').forEach(button => {
+            button.addEventListener('click', function(e) {
+                const rect = this.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const ripple = document.createElement('span');
+                ripple.classList.add('ripple');
+                ripple.style.left = `${x}px`;
+                ripple.style.top = `${y}px`;
+                this.appendChild(ripple);
+                
+                setTimeout(() => ripple.remove(), 600);
             });
-
-            // Close sidebar when clicking on overlay
-            overlay.addEventListener('click', closeSidebar);
-
-            // Close sidebar when clicking anywhere outside
-            document.addEventListener('click', function(e) {
-                if (sidebar.classList.contains('open') && 
-                    !sidebar.contains(e.target) && 
-                    e.target !== toggleBtn) {
-                    closeSidebar();
-                }
-            });
-
-            // Close sidebar when pressing Escape key
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && sidebar.classList.contains('open')) {
-                    closeSidebar();
-                }
-            });
-
-            // Button ripple effect
-            document.querySelectorAll('.btn:not([href])').forEach(button => {
-                button.addEventListener('click', function(e) {
-                    const rect = this.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    
-                    const ripple = document.createElement('span');
-                    ripple.classList.add('ripple');
-                    ripple.style.left = `${x}px`;
-                    ripple.style.top = `${y}px`;
-                    this.appendChild(ripple);
-                    
-                    setTimeout(() => ripple.remove(), 600);
-                });
-            });
-
-            // Initialize Swiper if present
-            if (document.querySelector('.swiper-container')) {
-                new Swiper('.swiper-container', {
-                    loop: true,
-                    autoplay: { delay: 5000 },
-                    pagination: { 
-                        el: '.swiper-pagination',
-                        clickable: true 
-                    },
-                    navigation: {
-                        nextEl: '.swiper-button-next',
-                        prevEl: '.swiper-button-prev',
-                    }
-                });
-            }
         });
+
+        // Initialize Swiper if present
+        if (document.querySelector('.swiper-container')) {
+            new Swiper('.swiper-container', {
+                loop: true,
+                autoplay: { delay: 5000 },
+                pagination: { 
+                    el: '.swiper-pagination',
+                    clickable: true 
+                },
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                }
+            });
+        }
     </script>
     
     @stack('scripts')

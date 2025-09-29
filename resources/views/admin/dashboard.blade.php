@@ -102,53 +102,91 @@
     </div>
 
     <!-- Contact & Support Section -->
-    <div class="section-card contact-section">
-        <div class="section-header">
-            <div class="section-icon">📞</div>
-            <h2 class="section-title">Contact & Support</h2>
-            @if(auth()->user()->is_admin)
-            <div class="admin-controls">
-                <button class="btn btn-warning btn-small">Edit</button>
+<div class="section-card contact-section">
+    <div class="section-header">
+        <div class="section-icon">📞</div>
+        <h2 class="section-title">Contact & Support</h2>
+    </div>
+    
+    <div class="contact-container">
+        <div class="contact-info">
+            @if($aboutUs && $aboutUs->address)
+            <div class="contact-item">
+                <div class="contact-icon">📍</div>
+                <div>
+                    <h4>Our Location</h4>
+                    <p>{{ $aboutUs->address }}</p>
+                </div>
+            </div>
+            @endif
+            
+            <div class="contact-item">
+                <div class="contact-icon">📧</div>
+                <div>
+                    <h4>Email Us</h4>
+                    <a href="mailto:{{ $aboutUs->email ?? 'support@eventmanager.com' }}" class="contact-link">
+                        {{ $aboutUs->email ?? 'support@eventmanager.com' }}
+                    </a>
+                </div>
+            </div>
+            
+            @if($aboutUs && $aboutUs->phone)
+            <div class="contact-item">
+                <div class="contact-icon">📱</div>
+                <div>
+                    <h4>Call Us</h4>
+                    <a href="tel:{{ $aboutUs->phone }}" class="contact-link">{{ $aboutUs->phone }}</a>
+                </div>
+            </div>
+            @endif
+            
+            @if($aboutUs && $aboutUs->whatsapp)
+            <div class="contact-item">
+                <div class="contact-icon whatsapp-icon">💬</div>
+                <div>
+                    <h4>WhatsApp</h4>
+                    <a href="https://wa.me/{{ $aboutUs->whatsapp }}" target="_blank" class="contact-link">
+                        {{ $aboutUs->whatsapp }}
+                    </a>
+                </div>
             </div>
             @endif
         </div>
         
-        <div class="contact-container">
-            <div class="contact-info">
-                <div class="contact-item">
-                    <div class="contact-icon">📍</div>
-                    <div>
-                        <h4>Our Location</h4>
-                        <p>123 Event Street, Activity City</p>
-                    </div>
-                </div>
-                <div class="contact-item">
-                    <div class="contact-icon">📧</div>
-                    <div>
-                        <h4>Email Us</h4>
-                        <p>support@eventmanager.com</p>
-                    </div>
-                </div>
-                <div class="contact-item">
-                    <div class="contact-icon">📱</div>
-                    <div>
-                        <h4>Call Us</h4>
-                        <p>(123) 456-7890</p>
-                    </div>
-                </div>
+        <div class="social-links">
+            <h4>Follow Us</h4>
+            <div class="social-icons">
+                @if($aboutUs && $aboutUs->facebook_url)
+                <a href="{{ $aboutUs->facebook_url }}" target="_blank" class="social-link facebook">f</a>
+                @endif
+                
+                @if($aboutUs && $aboutUs->twitter_url)
+                <a href="{{ $aboutUs->twitter_url }}" target="_blank" class="social-link twitter">𝕏</a>
+                @endif
+                
+                @if($aboutUs && $aboutUs->instagram_url)
+                <a href="{{ $aboutUs->instagram_url }}" target="_blank" class="social-link instagram">📷</a>
+                @endif
+                
+                @if($aboutUs && $aboutUs->linkedin_url)
+                <a href="{{ $aboutUs->linkedin_url }}" target="_blank" class="social-link linkedin">in</a>
+                @endif
+                
+                @if($aboutUs && $aboutUs->youtube_url)
+                <a href="{{ $aboutUs->youtube_url }}" target="_blank" class="social-link youtube">▶️</a>
+                @endif
             </div>
             
-            <div class="social-links">
-                <h4>Follow Us</h4>
-                <div class="social-icons">
-                    <a href="#" class="social-link facebook">f</a>
-                    <a href="#" class="social-link twitter">𝕏</a>
-                    <a href="#" class="social-link instagram">📷</a>
-                    <a href="#" class="social-link youtube">▶️</a>
-                </div>
+            @if($aboutUs && $aboutUs->map_link)
+            <div class="map-link">
+                <a href="{{ $aboutUs->map_link }}" target="_blank" class="btn btn-outline map-btn">
+                    📍 View on Map
+                </a>
             </div>
+            @endif
         </div>
     </div>
+</div>
 </div>
 
 <style>
