@@ -7,7 +7,7 @@
 <!-- Sidebar -->
 <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
-        <h2>{{ config('app.name', 'My App') }}</h2>
+        <h2>Baya</h2>
         <div class="glow-orb"></div>
     </div>
     
