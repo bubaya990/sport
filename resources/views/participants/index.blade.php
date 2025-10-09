@@ -259,14 +259,14 @@
                 <div class="col-md-2">
                     <div class="filter-group">
                         <div class="filter-label">Taille</div>
-                        <select class="form-select" name="size" id="sizeFilter">
+                        <select class="form-select" name="taille_maillot" id="sizeFilter">
                             <option value="">Toutes</option>
-                            <option value="XS" {{ request('size') == 'XS' ? 'selected' : '' }}>XS</option>
-                            <option value="S" {{ request('size') == 'S' ? 'selected' : '' }}>S</option>
-                            <option value="M" {{ request('size') == 'M' ? 'selected' : '' }}>M</option>
-                            <option value="L" {{ request('size') == 'L' ? 'selected' : '' }}>L</option>
-                            <option value="XL" {{ request('size') == 'XL' ? 'selected' : '' }}>XL</option>
-                            <option value="XXL" {{ request('size') == 'XXL' ? 'selected' : '' }}>XXL</option>
+                            <option value="XS" {{ request('taille_maillot') == 'XS' ? 'selected' : '' }}>XS</option>
+                            <option value="S" {{ request('taille_maillot') == 'S' ? 'selected' : '' }}>S</option>
+                            <option value="M" {{ request('taille_maillot') == 'M' ? 'selected' : '' }}>M</option>
+                            <option value="L" {{ request('taille_maillot') == 'L' ? 'selected' : '' }}>L</option>
+                            <option value="XL" {{ request('taille_maillot') == 'XL' ? 'selected' : '' }}>XL</option>
+                            <option value="XXL" {{ request('taille_maillot') == 'XXL' ? 'selected' : '' }}>XXL</option>
                         </select>
                     </div>
                 </div>
@@ -352,8 +352,8 @@
                             @endif
                         </td>
                         <td>
-                            @if($participant->size)
-                                <span class="badge badge-size">{{ $participant->size }}</span>
+                            @if($participant->taille_maillot)
+                                <span class="badge badge-size">{{ $participant->taille_maillot }}</span>
                             @else
                                 N/A
                             @endif

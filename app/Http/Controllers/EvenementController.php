@@ -43,6 +43,7 @@ class EvenementController extends Controller
             'description' => 'required|string',
             'date' => 'required|date',
             'end_date' => 'nullable|date|after_or_equal:date',
+            'prix' => 'nullable|numeric|min:0',
             'status' => 'required|in:scheduled,ongoing,completed',
             'images' => 'nullable|array',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048'
@@ -61,6 +62,7 @@ class EvenementController extends Controller
             'description' => $validated['description'],
             'date' => $validated['date'],
             'end_date' => $validated['end_date'],
+            'prix' => $validated['prix'],
             'status' => $validated['status'],
             'images' => !empty($images) ? $images : null
         ]);
@@ -101,6 +103,7 @@ class EvenementController extends Controller
             'description' => 'required|string',
             'date' => 'required|date',
             'end_date' => 'nullable|date|after_or_equal:date',
+            'prix' => 'nullable|numeric|min:0',
             'status' => 'required|in:scheduled,ongoing,completed',
             'images' => 'nullable|array',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -131,6 +134,7 @@ class EvenementController extends Controller
             'description' => $validated['description'],
             'date' => $validated['date'],
             'end_date' => $validated['end_date'],
+            'prix' => $validated['prix'],
             'status' => $validated['status'],
         ];
 

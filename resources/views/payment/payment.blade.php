@@ -100,9 +100,15 @@
                     </div>
                     
                     <div class="form-group">
-                        <label for="ville" class="form-label">Ville *</label>
-                        <input type="text" name="ville" id="ville" class="form-input" 
-                               value="{{ old('ville') }}" required>
+                        <label for="nationalite" class="form-label">Nationalité *</label>
+                        <select name="nationalite" id="nationalite" class="form-select" required>
+                            <option value="">Sélectionnez votre nationalité</option>
+                            <option value="Algérie" {{ old('nationalite') == 'Algérie' ? 'selected' : '' }}>Algérie</option>
+                            <option value="France" {{ old('nationalite') == 'France' ? 'selected' : '' }}>France</option>
+                            <option value="Tunisie" {{ old('nationalite') == 'Tunisie' ? 'selected' : '' }}>Tunisie</option>
+                            <option value="Maroc" {{ old('nationalite') == 'Maroc' ? 'selected' : '' }}>Maroc</option>
+                            <option value="Autre" {{ old('nationalite') == 'Autre' ? 'selected' : '' }}>Autre</option>
+                        </select>
                     </div>
                 </div>
 
@@ -126,6 +132,52 @@
                             <option value="XL" {{ old('taille_maillot') == 'XL' ? 'selected' : '' }}>XL</option>
                             <option value="XXL" {{ old('taille_maillot') == 'XXL' ? 'selected' : '' }}>XXL</option>
                         </select>
+                    </div>
+                </div>
+
+                <div class="form-group" id="wilaya-group" style="display: none;">
+                    <label for="wilaya" class="form-label">Wilaya *</label>
+                    <select name="wilaya" id="wilaya" class="form-select">
+                        <option value="">Sélectionnez votre wilaya</option>
+                        <option value="Alger" {{ old('wilaya') == 'Alger' ? 'selected' : '' }}>Alger</option>
+                        <option value="Oran" {{ old('wilaya') == 'Oran' ? 'selected' : '' }}>Oran</option>
+                        <option value="Constantine" {{ old('wilaya') == 'Constantine' ? 'selected' : '' }}>Constantine</option>
+                        <option value="Annaba" {{ old('wilaya') == 'Annaba' ? 'selected' : '' }}>Annaba</option>
+                        <option value="Blida" {{ old('wilaya') == 'Blida' ? 'selected' : '' }}>Blida</option>
+                        <option value="Tizi Ouzou" {{ old('wilaya') == 'Tizi Ouzou' ? 'selected' : '' }}>Tizi Ouzou</option>
+                        <option value="Sétif" {{ old('wilaya') == 'Sétif' ? 'selected' : '' }}>Sétif</option>
+                        <option value="Batna" {{ old('wilaya') == 'Batna' ? 'selected' : '' }}>Batna</option>
+                        <option value="Djelfa" {{ old('wilaya') == 'Djelfa' ? 'selected' : '' }}>Djelfa</option>
+                        <option value="Sidi Bel Abbès" {{ old('wilaya') == 'Sidi Bel Abbès' ? 'selected' : '' }}>Sidi Bel Abbès</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="pays-group" style="display: none;">
+                    <label for="pays" class="form-label">Pays *</label>
+                    <input type="text" name="pays" id="pays" class="form-input" 
+                           value="{{ old('pays') }}" placeholder="Entrez votre pays">
+                </div>
+
+                <div class="form-group">
+                    <label for="club" class="form-label">Club (si applicable)</label>
+                    <input type="text" name="club" id="club" class="form-input" 
+                           value="{{ old('club') }}" placeholder="Nom de votre club">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="affilie_federation" class="form-label">Affilié à la Fédération *</label>
+                        <select name="affilie_federation" id="affilie_federation" class="form-select" required>
+                            <option value="">Sélectionnez une option</option>
+                            <option value="oui" {{ old('affilie_federation') == 'oui' ? 'selected' : '' }}>OUI</option>
+                            <option value="non" {{ old('affilie_federation') == 'non' ? 'selected' : '' }}>NON</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group" id="numero_licence_group">
+                        <label for="numero_licence" class="form-label">Numéro de licence</label>
+                        <input type="text" name="numero_licence" id="numero_licence" class="form-input" 
+                               value="{{ old('numero_licence') }}" placeholder="Votre numéro de licence">
                     </div>
                 </div>
             </div>
@@ -431,8 +483,16 @@
         const eventSelect = document.getElementById('evenement_id');
         const eventDetails = document.getElementById('eventDetails');
         const paymentPrice = document.getElementById('paymentPrice');
+        const nationaliteSelect = document.getElementById('nationalite');
+        const wilayaGroup = document.getElementById('wilaya-group');
+        const paysGroup = document.getElementById('pays-group');
+        const wilayaSelect = document.getElementById('wilaya');
+        const paysInput = document.getElementById('pays');
+        const affilieFederationSelect = document.getElementById('affilie_federation');
+        const numeroLicenceGroup = document.getElementById('numero_licence_group');
+        const numeroLicenceInput = document.getElementById('numero_licence');
         
-        // Get event details via AJAX
+        // Get event details from selected option
         function loadEventDetails(eventId) {
             if (!eventId) {
                 eventDetails.innerHTML = '';
@@ -440,30 +500,64 @@
                 return;
             }
             
-            fetch(`/api/events/${eventId}`)
-                .then(response => response.json())
-                .then(event => {
-                    eventDetails.innerHTML = `
-                        <div class="event-card-preview">
-                            <h3>${event.titre}</h3>
-                            <p class="event-description">${event.description}</p>
-                            <div class="event-meta">
-                                <span class="event-date">📅 ${new Date(event.date).toLocaleDateString('fr-FR', { 
-                                    day: 'numeric', 
-                                    month: 'long', 
-                                    year: 'numeric' 
-                                })}</span>
-                                <span class="event-price">💰 ${event.prix} DA</span>
-                            </div>
+            // Find the selected option
+            const selectedOption = eventSelect.options[eventSelect.selectedIndex];
+            if (selectedOption && selectedOption.value) {
+                const eventPrice = selectedOption.getAttribute('data-price');
+                const optionText = selectedOption.textContent;
+                
+                // Extract event title and date from option text
+                const titleMatch = optionText.match(/(.*?) - \d+/);
+                const dateMatch = optionText.match(/\(([^)]+)\)/);
+                
+                const eventTitle = titleMatch ? titleMatch[1] : 'Événement';
+                const eventDate = dateMatch ? dateMatch[1] : '';
+                
+                eventDetails.innerHTML = `
+                    <div class="event-card-preview">
+                        <h3>${eventTitle}</h3>
+                        <div class="event-meta">
+                            <span class="event-date">📅 ${eventDate}</span>
+                            <span class="event-price">💰 ${eventPrice} DA</span>
                         </div>
-                    `;
-                    
-                    paymentPrice.textContent = `${event.prix} DA`;
-                })
-                .catch(error => {
-                    console.error('Error loading event details:', error);
-                    eventDetails.innerHTML = '<p class="text-danger">Erreur lors du chargement des détails</p>';
-                });
+                    </div>
+                `;
+                
+                paymentPrice.textContent = `${eventPrice} DA`;
+            }
+        }
+        
+        // Handle nationality change
+        function handleNationaliteChange() {
+            const nationalite = nationaliteSelect.value;
+            
+            if (nationalite === 'Algérie') {
+                wilayaGroup.style.display = 'block';
+                paysGroup.style.display = 'none';
+                wilayaSelect.setAttribute('required', 'required');
+                paysInput.removeAttribute('required');
+            } else if (nationalite) {
+                wilayaGroup.style.display = 'none';
+                paysGroup.style.display = 'block';
+                wilayaSelect.removeAttribute('required');
+                paysInput.setAttribute('required', 'required');
+            } else {
+                wilayaGroup.style.display = 'none';
+                paysGroup.style.display = 'none';
+                wilayaSelect.removeAttribute('required');
+                paysInput.removeAttribute('required');
+            }
+        }
+        
+        // Handle federation affiliation change
+        function handleAffilieFederationChange() {
+            const affilie = affilieFederationSelect.value;
+            
+            if (affilie === 'oui') {
+                numeroLicenceInput.setAttribute('required', 'required');
+            } else {
+                numeroLicenceInput.removeAttribute('required');
+            }
         }
         
         // Event selection change
@@ -471,10 +565,22 @@
             loadEventDetails(this.value);
         });
         
+        // Nationality change
+        nationaliteSelect.addEventListener('change', handleNationaliteChange);
+        
+        // Federation affiliation change
+        affilieFederationSelect.addEventListener('change', handleAffilieFederationChange);
+        
         // Initialize if event is preselected
         @if($event)
             loadEventDetails({{ $event->id }});
         @endif
+        
+        // Initialize nationality field
+        handleNationaliteChange();
+        
+        // Initialize federation affiliation field
+        handleAffilieFederationChange();
     });
 </script>
 @endsection

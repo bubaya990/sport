@@ -29,7 +29,7 @@ class ParticipantController extends Controller
             $query->where('sexe', $request->sexe);
         }
         
-        // Size filter
+        // Size filter - CORRECTION : Utiliser 'size' comme dans la base de données
         if ($request->has('size') && !empty($request->size)) {
             $query->where('size', $request->size);
         }
@@ -93,7 +93,7 @@ class ParticipantController extends Controller
             'date_naissance' => 'nullable|date',
             'ville' => 'nullable|string|max:255',
             'sexe' => 'nullable|in:homme,femme',
-            'size' => 'nullable|in:XS,S,M,L,XL,XXL'
+            'size' => 'nullable|in:XS,S,M,L,XL,XXL' // CORRECTION : Utiliser 'size'
         ]);
         
         Participant::create($validated);
@@ -118,7 +118,7 @@ class ParticipantController extends Controller
             'date_naissance' => 'nullable|date',
             'ville' => 'nullable|string|max:255',
             'sexe' => 'nullable|in:homme,femme',
-            'size' => 'nullable|in:XS,S,M,L,XL,XXL'
+            'size' => 'nullable|in:XS,S,M,L,XL,XXL' // CORRECTION : Utiliser 'size'
         ]);
         
         $participant->update($validated);

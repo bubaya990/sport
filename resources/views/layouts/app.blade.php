@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>Baya</title>
+    <title>CSA Brakni</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -404,7 +404,7 @@
     <div class="main" id="mainContent">
         <!-- Top Navigation Bar -->
         <nav class="top-nav" id="topNav">
-            <a href="{{ url('/') }}" class="nav-logo">Baya</a>
+            <a href="{{ url('/') }}" class="nav-logo">CSA Brakni</a>
         </nav>
 
         <!-- Page Content -->

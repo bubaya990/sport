@@ -15,65 +15,65 @@ class PaymentController extends Controller
     {
         $event = $eventId ? Evenement::findOrFail($eventId) : null;
 
-        $activeEvents = Evenement::where('status', 'scheduled')
-            ->where('end_date', '>=', now())
+        // CORRECTION : Récupérer TOUS les événements scheduled ET ongoing
+        $activeEvents = Evenement::whereIn('status', ['scheduled', 'ongoing'])
+            ->orderBy('date', 'asc')
             ->get();
 
         return view('payment.payment', compact('event', 'activeEvents'));
     }
 
-   public function processPayment(Request $request)
-{
-    $validator = Validator::make($request->all(), [
-        'evenement_id'   => 'required|exists:evenements,id',
-        'nom'            => 'required|string|max:255',
-        'prenom'         => 'required|string|max:255',
-        'email'          => 'required|email|max:255',
-        'telephone'      => 'required|string|max:20',
-        'adresse'        => 'required|string|max:500',
-        'date_naissance' => 'required|date',
-        'ville'          => 'required|string|max:255',
-        'sexe'           => 'required|in:homme,femme',
-        'taille_maillot' => 'required|in:S,M,L,XL,XXL',
-        'type_paiement'  => 'required|in:visa,poste,carte_dor',
-    ]);
+    public function processPayment(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'evenement_id'   => 'required|exists:evenements,id',
+            'nom'            => 'required|string|max:255',
+            'prenom'         => 'required|string|max:255',
+            'email'          => 'required|email|max:255',
+            'telephone'      => 'required|string|max:20',
+            'adresse'        => 'required|string|max:500',
+            'date_naissance' => 'required|date',
+            'ville'          => 'required|string|max:255',
+            'sexe'           => 'required|in:homme,femme',
+            'taille_maillot' => 'required|in:S,M,L,XL,XXL',
+            'type_paiement'  => 'required|in:visa,poste,carte_dor',
+        ]);
 
-    if ($validator->fails()) {
-        return back()->withErrors($validator)->withInput();
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        // Find or create participant
+        $participant = Participant::firstOrCreate(
+            [
+                'telephone' => $request->telephone,
+                'nom'       => $request->nom,
+                'prenom'    => $request->prenom,
+            ],
+            [
+                'email'          => $request->email,
+                'adresse'        => $request->adresse,
+                'date_naissance' => $request->date_naissance,
+                'ville'          => $request->ville,
+                'sexe'           => $request->sexe,
+                'taille_maillot' => $request->taille_maillot, // CORRECTION : 'taille_maillot' au lieu de 'size'
+            ]
+        );
+
+        $event = Evenement::findOrFail($request->evenement_id);
+
+        $paiement = Paiement::create([
+            'participant_id' => $participant->id,
+            'evenement_id'   => $event->id,
+            'type'           => $request->type_paiement,
+            'transaction_id' => 'TRX_' . Str::upper(Str::random(10)),
+            'montant'        => $event->prix,
+            'statut'         => false,
+        ]);
+
+        // 🔴 Mock redirect (simulating SATIM success)
+        return redirect()->route('payment.mock.success', ['id' => $paiement->id]);
     }
-
-    // Find or create participant
-    $participant = Participant::firstOrCreate(
-        [
-            'telephone' => $request->telephone,
-            'nom'       => $request->nom,
-            'prenom'    => $request->prenom,
-        ],
-        [
-            'email'          => $request->email,
-            'adresse'        => $request->adresse,
-            'date_naissance' => $request->date_naissance,
-            'ville'          => $request->ville,
-            'sexe'           => $request->sexe,
-            'size'           => $request->taille_maillot,
-        ]
-    );
-
-    $event = Evenement::findOrFail($request->evenement_id);
-
-    $paiement = Paiement::create([
-        'participant_id' => $participant->id,
-        'evenement_id'   => $event->id,
-        'type'           => $request->type_paiement,
-        'transaction_id' => 'TRX_' . Str::upper(Str::random(10)),
-        'montant'        => $event->prix,
-        'statut'         => false,
-    ]);
-
-    // 🔴 Mock redirect (simulating SATIM success)
-    return redirect()->route('payment.mock.success', ['id' => $paiement->id]);
-}
-
 
     public function success($id)
     {

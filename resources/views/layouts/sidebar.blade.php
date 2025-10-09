@@ -7,13 +7,12 @@
 <!-- Sidebar -->
 <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
-        <h2>Baya</h2>
+        <h2>CSA Brakni</h2>
         <div class="glow-orb"></div>
     </div>
     
     <div class="sidebar-nav">
         <div class="nav-section">
-            <div class="nav-section-title">Main</div>
             <a href="{{ route('site.dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
                 <span class="nav-ripple"></span>
                 Visitor Dashboard
