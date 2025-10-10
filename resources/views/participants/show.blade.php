@@ -69,10 +69,10 @@
                             </span>
                         </div>
                         <div class="info-item">
-                            <span class="info-label">Taille</span>
+                            <span class="info-label">Taille de maillot</span>
                             <span class="info-value">
-                                @if($participant->size)
-                                    <span class="badge size-badge">{{ $participant->size }}</span>
+                                @if($participant->taille_maillot)
+                                    <span class="badge taille-badge">{{ $participant->taille_maillot }}</span>
                                 @else
                                     Non spécifiée
                                 @endif
@@ -118,9 +118,13 @@
                             </span>
                         </div>
                         <div class="info-item">
-                            <span class="info-label">Ville</span>
+                            <span class="info-label">Pays</span>
                             <span class="info-value">
-                                {{ $participant->ville ?? 'Non spécifiée' }}
+                                @if($participant->nationalite == 'Algérie' && $participant->wilaya)
+                                    Algérie ({{ $participant->wilaya }})
+                                @else
+                                    {{ $participant->nationalite ?? 'Non spécifié' }}
+                                @endif
                             </span>
                         </div>
                     </div>
@@ -130,9 +134,6 @@
 
         <div class="card-footer-section">
             <div class="action-buttons">
-                <a href="{{ route('participants.edit', $participant->id) }}" class="btn btn-edit">
-                    <i class="fas fa-edit"></i> Modifier
-                </a>
                 <form action="{{ route('participants.destroy', $participant->id) }}" method="POST" class="delete-form">
                     @csrf
                     @method('DELETE')
@@ -303,7 +304,7 @@
         border: 1px solid rgba(148, 163, 184, 0.3);
     }
 
-    .size-badge {
+    .taille-badge {
         background: rgba(139, 92, 246, 0.15);
         color: #8b5cf6;
         border: 1px solid rgba(139, 92, 246, 0.3);

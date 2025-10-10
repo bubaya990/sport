@@ -8,7 +8,7 @@ use Carbon\Carbon;
 
 class ParticipantController extends Controller
 {
-     public function index(Request $request)
+    public function index(Request $request)
     {
         $query = Participant::query();
         
@@ -19,7 +19,7 @@ class ParticipantController extends Controller
                 $q->where('nom', 'like', "%{$search}%")
                   ->orWhere('prenom', 'like', "%{$search}%")
                   ->orWhere('email', 'like', "%{$search}%")
-                  ->orWhere('ville', 'like', "%{$search}%")
+                  ->orWhere('nationalite', 'like', "%{$search}%")
                   ->orWhere('telephone', 'like', "%{$search}%");
             });
         }
@@ -29,17 +29,17 @@ class ParticipantController extends Controller
             $query->where('sexe', $request->sexe);
         }
         
-        // Size filter - CORRECTION : Utiliser 'size' comme dans la base de données
-        if ($request->has('size') && !empty($request->size)) {
-            $query->where('size', $request->size);
+        // Taille maillot filter
+        if ($request->has('taille_maillot') && !empty($request->taille_maillot)) {
+            $query->where('taille_maillot', $request->taille_maillot);
         }
         
-        // Ville filter
-        if ($request->has('ville') && !empty($request->ville)) {
-            $query->where('ville', $request->ville);
+        // Nationalite filter
+        if ($request->has('nationalite') && !empty($request->nationalite)) {
+            $query->where('nationalite', $request->nationalite);
         }
         
-        // Age range filter - FIXED
+        // Age range filter
         if ($request->has('age_range') && !empty($request->age_range)) {
             $ageRange = $request->age_range;
             $today = Carbon::today();
@@ -58,19 +58,18 @@ class ParticipantController extends Controller
             }
         }
         
-        // Get unique villes for filter dropdown
-        $villes = Participant::whereNotNull('ville')
-                            ->where('ville', '!=', '')
-                            ->distinct()
-                            ->pluck('ville')
-                            ->sort();
+        // Get unique nationalites for filter dropdown
+        $nationalites = Participant::whereNotNull('nationalite')
+                                ->where('nationalite', '!=', '')
+                                ->distinct()
+                                ->pluck('nationalite')
+                                ->sort();
         
         // Paginate results
         $participants = $query->orderBy('nom')->orderBy('prenom')->paginate(15);
         
-        return view('participants.index', compact('participants', 'villes'));
+        return view('participants.index', compact('participants', 'nationalites'));
     }
-    
     
     public function show(Participant $participant)
     {
@@ -91,9 +90,10 @@ class ParticipantController extends Controller
             'telephone' => 'nullable|string|max:20',
             'adresse' => 'nullable|string',
             'date_naissance' => 'nullable|date',
-            'ville' => 'nullable|string|max:255',
+            'nationalite' => 'nullable|string|max:255',
+            'wilaya' => 'nullable|string|max:255',
             'sexe' => 'nullable|in:homme,femme',
-            'size' => 'nullable|in:XS,S,M,L,XL,XXL' // CORRECTION : Utiliser 'size'
+            'taille_maillot' => 'nullable|in:S,M,L,XL,XXL'
         ]);
         
         Participant::create($validated);
@@ -116,9 +116,10 @@ class ParticipantController extends Controller
             'telephone' => 'nullable|string|max:20',
             'adresse' => 'nullable|string',
             'date_naissance' => 'nullable|date',
-            'ville' => 'nullable|string|max:255',
+            'nationalite' => 'nullable|string|max:255',
+            'wilaya' => 'nullable|string|max:255',
             'sexe' => 'nullable|in:homme,femme',
-            'size' => 'nullable|in:XS,S,M,L,XL,XXL' // CORRECTION : Utiliser 'size'
+            'taille_maillot' => 'nullable|in:S,M,L,XL,XXL'
         ]);
         
         $participant->update($validated);

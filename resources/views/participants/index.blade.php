@@ -19,21 +19,6 @@
         border-bottom: 2px solid var(--primary);
     }
     
-    .card {
-        border-radius: 10px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        margin-bottom: 25px;
-        border: none;
-    }
-    
-    .card-header {
-        background-color: var(--primary);
-        color: white;
-        border-radius: 10px 10px 0 0 !important;
-        padding: 15px 20px;
-        font-weight: 600;
-    }
-    
     .filter-section {
         padding: 20px;
         background-color: var(--card-bg);
@@ -41,6 +26,7 @@
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         margin-bottom: 25px;
         border: 1px solid var(--card-border);
+        backdrop-filter: blur(8px);
     }
     
     .filter-title {
@@ -83,12 +69,15 @@
         overflow-x: auto;
         border-radius: 10px;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        background: var(--card-bg);
+        border: 1px solid var(--card-border);
+        backdrop-filter: blur(8px);
     }
     
     table {
         width: 100%;
         border-collapse: collapse;
-        background-color: var(--card-bg);
+        background-color: transparent;
     }
     
     th {
@@ -129,7 +118,7 @@
         color: #ef4444;
     }
     
-    .badge-size {
+    .badge-taille {
         background-color: rgba(139, 92, 246, 0.3);
         color: #8b5cf6;
         font-weight: 700;
@@ -150,6 +139,7 @@
     .page-item.active .page-link {
         background-color: var(--primary);
         border-color: var(--primary);
+        color: white;
     }
     
     .action-buttons {
@@ -161,6 +151,13 @@
         padding: 5px 10px;
         border-radius: 4px;
         font-size: 14px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-action:hover {
+        transform: translateY(-2px);
     }
     
     .results-count {
@@ -192,6 +189,53 @@
         box-shadow: 0 0 0 2px var(--primary-light);
     }
     
+    .search-input::placeholder {
+        color: var(--text-secondary);
+    }
+    
+    /* Modal Styles for Dark Theme */
+    .modal-content {
+        background: var(--card-bg);
+        border: 1px solid var(--card-border);
+        color: var(--text);
+        backdrop-filter: blur(8px);
+    }
+    
+    .modal-header {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(30, 41, 59, 0.8);
+    }
+    
+    .modal-title {
+        color: var(--text);
+    }
+    
+    .modal-footer {
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .btn-close {
+        filter: invert(1);
+    }
+    
+    .form-select, .form-control {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: var(--text);
+    }
+    
+    .form-select:focus, .form-control:focus {
+        background: rgba(255, 255, 255, 0.15);
+        border-color: var(--primary);
+        color: var(--text);
+        box-shadow: 0 0 0 2px var(--primary-light);
+    }
+    
+    .form-select option {
+        background: var(--secondary);
+        color: var(--text);
+    }
+    
     @media (max-width: 768px) {
         .container {
             padding: 15px;
@@ -208,6 +252,16 @@
         .search-form {
             flex-direction: column;
         }
+        
+        .action-buttons {
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .btn-action {
+            width: 100%;
+            justify-content: center;
+        }
     }
 </style>
 @endpush
@@ -217,9 +271,9 @@
     <h1 class="page-title"><i class="fas fa-users"></i> Liste des Participants</h1>
     
     <!-- Search Form -->
-    <form class="search-form" id="searchForm" method="GET" action="{{ route('participants.index') }}">
-        <input type="text" class="search-input" name="search" id="globalSearch" 
-               placeholder="Rechercher un participant..." value="{{ request('search') }}">
+    <form class="search-form" method="GET" action="{{ route('participants.index') }}">
+        <input type="text" class="search-input" name="search" 
+               placeholder="Rechercher par nom ou prénom..." value="{{ request('search') }}">
         <button type="submit" class="btn btn-filter">
             <i class="fas fa-search"></i> Rechercher
         </button>
@@ -229,12 +283,15 @@
     <div class="filter-section">
         <h3 class="filter-title"><i class="fas fa-filter"></i> Filtres</h3>
         
-        <form method="GET" action="{{ route('participants.index') }}" id="filterForm">
+        <form method="GET" action="{{ route('participants.index') }}">
+            @if(request('search'))
+                <input type="hidden" name="search" value="{{ request('search') }}">
+            @endif
             <div class="row">
                 <div class="col-md-3">
                     <div class="filter-group">
                         <div class="filter-label">Tranche d'âge</div>
-                        <select class="form-select" name="age_range" id="ageFilter">
+                        <select class="form-select" name="age_range">
                             <option value="">Tous les âges</option>
                             <option value="18-23" {{ request('age_range') == '18-23' ? 'selected' : '' }}>18-23 ans</option>
                             <option value="24-39" {{ request('age_range') == '24-39' ? 'selected' : '' }}>24-39 ans</option>
@@ -248,7 +305,7 @@
                 <div class="col-md-2">
                     <div class="filter-group">
                         <div class="filter-label">Sexe</div>
-                        <select class="form-select" name="sexe" id="sexFilter">
+                        <select class="form-select" name="sexe">
                             <option value="">Tous</option>
                             <option value="homme" {{ request('sexe') == 'homme' ? 'selected' : '' }}>Homme</option>
                             <option value="femme" {{ request('sexe') == 'femme' ? 'selected' : '' }}>Femme</option>
@@ -258,10 +315,9 @@
                 
                 <div class="col-md-2">
                     <div class="filter-group">
-                        <div class="filter-label">Taille</div>
-                        <select class="form-select" name="taille_maillot" id="sizeFilter">
+                        <div class="filter-label">Taille de maillot</div>
+                        <select class="form-select" name="taille_maillot">
                             <option value="">Toutes</option>
-                            <option value="XS" {{ request('taille_maillot') == 'XS' ? 'selected' : '' }}>XS</option>
                             <option value="S" {{ request('taille_maillot') == 'S' ? 'selected' : '' }}>S</option>
                             <option value="M" {{ request('taille_maillot') == 'M' ? 'selected' : '' }}>M</option>
                             <option value="L" {{ request('taille_maillot') == 'L' ? 'selected' : '' }}>L</option>
@@ -273,11 +329,13 @@
                 
                 <div class="col-md-3">
                     <div class="filter-group">
-                        <div class="filter-label">Ville</div>
-                        <select class="form-select" name="ville" id="villeFilter">
-                            <option value="">Toutes les villes</option>
-                            @foreach($villes as $ville)
-                                <option value="{{ $ville }}" {{ request('ville') == $ville ? 'selected' : '' }}>{{ $ville }}</option>
+                        <div class="filter-label">Pays</div>
+                        <select class="form-select" name="nationalite">
+                            <option value="">Tous les pays</option>
+                            @foreach($nationalites as $nationalite)
+                                @if($nationalite)
+                                    <option value="{{ $nationalite }}" {{ request('nationalite') == $nationalite ? 'selected' : '' }}>{{ $nationalite }}</option>
+                                @endif
                             @endforeach
                         </select>
                     </div>
@@ -287,10 +345,10 @@
                     <div class="filter-group">
                         <div class="filter-label">Actions</div>
                         <div class="d-flex gap-2">
-                            <button type="submit" class="btn btn-filter w-100" id="applyFilters">
+                            <button type="submit" class="btn btn-filter w-100">
                                 <i class="fas fa-check"></i> Appliquer
                             </button>
-                            <a href="{{ route('participants.index') }}" class="btn btn-outline-secondary w-100" id="resetFilters">
+                            <a href="{{ route('participants.index') }}" class="btn btn-outline-secondary w-100">
                                 <i class="fas fa-redo"></i>
                             </a>
                         </div>
@@ -311,11 +369,11 @@
                     <th>Prénom</th>
                     <th>Email</th>
                     <th>Téléphone</th>
-                    <th>Ville</th>
+                    <th>Pays</th>
                     <th>Date Naissance</th>
                     <th>Âge</th>
                     <th>Sexe</th>
-                    <th>Taille</th>
+                    <th>Taille de maillot</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -327,7 +385,13 @@
                         <td>{{ $participant->prenom }}</td>
                         <td>{{ $participant->email ?? 'N/A' }}</td>
                         <td>{{ $participant->telephone ?? 'N/A' }}</td>
-                        <td>{{ $participant->ville ?? 'N/A' }}</td>
+                        <td>
+                            @if($participant->nationalite == 'Algérie' && $participant->wilaya)
+                                Algérie ({{ $participant->wilaya }})
+                            @else
+                                {{ $participant->nationalite ?? 'N/A' }}
+                            @endif
+                        </td>
                         <td>
                             @if($participant->date_naissance)
                                 {{ \Carbon\Carbon::parse($participant->date_naissance)->format('d/m/Y') }}
@@ -353,15 +417,16 @@
                         </td>
                         <td>
                             @if($participant->taille_maillot)
-                                <span class="badge badge-size">{{ $participant->taille_maillot }}</span>
+                                <span class="badge badge-taille">{{ $participant->taille_maillot }}</span>
                             @else
                                 N/A
                             @endif
                         </td>
                         <td class="action-buttons">
-                            <a href="{{ route('participants.show', $participant->id) }}" class="btn btn-primary btn-action"><i class="fas fa-eye"></i></a>
-                            <a href="{{ route('participants.edit', $participant->id) }}" class="btn btn-success btn-action"><i class="fas fa-edit"></i></a>
-                            <form action="{{ route('participants.destroy', $participant->id) }}" method="POST" style="display: inline-block;">
+                            <a href="{{ route('participants.show', $participant->id) }}" class="btn btn-primary btn-action">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <form action="{{ route('participants.destroy', $participant->id) }}" method="POST" style="display: inline;">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-action" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce participant?')">
@@ -402,36 +467,12 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Filter functionality
-        const applyFilters = document.getElementById('applyFilters');
-        const resetFilters = document.getElementById('resetFilters');
-        const ageFilter = document.getElementById('ageFilter');
-        const sexFilter = document.getElementById('sexFilter');
-        const sizeFilter = document.getElementById('sizeFilter');
-        const villeFilter = document.getElementById('villeFilter');
-        const globalSearch = document.getElementById('globalSearch');
-        const searchForm = document.getElementById('searchForm');
-        
         // Auto-submit filters when changed
-        document.getElementById('ageFilter').addEventListener('change', function() {
-            document.getElementById('filterForm').submit();
-        });
-        
-        document.getElementById('sexFilter').addEventListener('change', function() {
-            document.getElementById('filterForm').submit();
-        });
-        
-        document.getElementById('sizeFilter').addEventListener('change', function() {
-            document.getElementById('filterForm').submit();
-        });
-        
-        document.getElementById('villeFilter').addEventListener('change', function() {
-            document.getElementById('filterForm').submit();
-        });
-        
-        searchForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            document.getElementById('filterForm').submit();
+        const filterSelects = document.querySelectorAll('select[name="age_range"], select[name="sexe"], select[name="taille_maillot"], select[name="nationalite"]');
+        filterSelects.forEach(select => {
+            select.addEventListener('change', function() {
+                this.form.submit();
+            });
         });
     });
 </script>

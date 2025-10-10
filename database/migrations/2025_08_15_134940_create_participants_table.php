@@ -13,17 +13,18 @@ return new class extends Migration
             $table->string('nom');
             $table->string('prenom');
             $table->string('telephone')->nullable();
-            $table->string('adresse')->nullable();
+            $table->text('adresse')->nullable();
             $table->date('date_naissance')->nullable();
-            $table->string('ville')->nullable();
-            $table->string('email')->nullable(); // Added email
-            $table->enum('sexe', ['homme', 'femme'])->nullable(); // Added sexe as enum
+            $table->string('nationalite')->nullable();
+            $table->string('wilaya')->nullable();
+            $table->string('email')->nullable();
+            $table->enum('sexe', ['homme', 'femme'])->nullable();
+            $table->enum('taille_maillot', ['S', 'M', 'L', 'XL', 'XXL'])->nullable();
+            $table->string('club')->nullable();
+            $table->enum('affilie_federation', ['oui', 'non'])->default('non');
+            $table->string('numero_licence')->nullable();
             $table->timestamps();
         });
-           Schema::table('participants', function (Blueprint $table) {
-            $table->enum('size', ['XS', 'S', 'M', 'L', 'XL', 'XXL'])->nullable()->after('sexe');
-        });
-    
     }
 
     public function down(): void

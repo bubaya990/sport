@@ -10,7 +10,7 @@
             <p class="payment-subtitle">Remplissez le formulaire ci-dessous pour vous inscrire à un événement</p>
         </div>
 
-        <form action="{{ route('payment.process') }}" method="POST" class="payment-form">
+        <form action="{{ route('payment.process') }}" method="POST" class="payment-form" id="paymentForm">
             @csrf
             
             @if($errors->any())
@@ -33,8 +33,10 @@
                         @foreach($activeEvents as $activeEvent)
                             <option value="{{ $activeEvent->id }}" 
                                 {{ $event && $event->id == $activeEvent->id ? 'selected' : '' }}
-                                data-price="{{ $activeEvent->prix }}">
-                                {{ $activeEvent->titre }} - {{ $activeEvent->prix }} DA
+                                data-price="{{ $activeEvent->prix }}"
+                                data-description="{{ $activeEvent->description }}"
+                                data-date="{{ $activeEvent->date->format('d/m/Y') }}">
+                                {{ $activeEvent->titre }} - {{ number_format($activeEvent->prix, 0, ',', ' ') }} DA
                                 ({{ $activeEvent->date->format('d/m/Y') }})
                             </option>
                         @endforeach
@@ -48,7 +50,7 @@
                             <p class="event-description">{{ $event->description }}</p>
                             <div class="event-meta">
                                 <span class="event-date">📅 {{ $event->date->format('d M Y') }}</span>
-                                <span class="event-price">💰 {{ $event->prix }} DA</span>
+                                <span class="event-price">💰 {{ number_format($event->prix, 0, ',', ' ') }} DA</span>
                             </div>
                         </div>
                     @endif
@@ -87,7 +89,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="adresse" class="form-label">Adresse *</label>
+                    <label for="adresse" class="form-label">Adresse complète *</label>
                     <textarea name="adresse" id="adresse" class="form-textarea" 
                               required>{{ old('adresse') }}</textarea>
                 </div>
@@ -110,6 +112,62 @@
                             <option value="Autre" {{ old('nationalite') == 'Autre' ? 'selected' : '' }}>Autre</option>
                         </select>
                     </div>
+                </div>
+
+                <!-- Wilaya field - only for Algerians -->
+                <div class="form-group" id="wilaya-group" style="display: none;">
+                    <label for="wilaya" class="form-label">Wilaya *</label>
+                    <select name="wilaya" id="wilaya" class="form-select">
+                        <option value="">Sélectionnez votre wilaya</option>
+                        <option value="Adrar" {{ old('wilaya') == 'Adrar' ? 'selected' : '' }}>Adrar</option>
+                        <option value="Chlef" {{ old('wilaya') == 'Chlef' ? 'selected' : '' }}>Chlef</option>
+                        <option value="Laghouat" {{ old('wilaya') == 'Laghouat' ? 'selected' : '' }}>Laghouat</option>
+                        <option value="Oum El Bouaghi" {{ old('wilaya') == 'Oum El Bouaghi' ? 'selected' : '' }}>Oum El Bouaghi</option>
+                        <option value="Batna" {{ old('wilaya') == 'Batna' ? 'selected' : '' }}>Batna</option>
+                        <option value="Béjaïa" {{ old('wilaya') == 'Béjaïa' ? 'selected' : '' }}>Béjaïa</option>
+                        <option value="Biskra" {{ old('wilaya') == 'Biskra' ? 'selected' : '' }}>Biskra</option>
+                        <option value="Béchar" {{ old('wilaya') == 'Béchar' ? 'selected' : '' }}>Béchar</option>
+                        <option value="Blida" {{ old('wilaya') == 'Blida' ? 'selected' : '' }}>Blida</option>
+                        <option value="Bouira" {{ old('wilaya') == 'Bouira' ? 'selected' : '' }}>Bouira</option>
+                        <option value="Tamanrasset" {{ old('wilaya') == 'Tamanrasset' ? 'selected' : '' }}>Tamanrasset</option>
+                        <option value="Tébessa" {{ old('wilaya') == 'Tébessa' ? 'selected' : '' }}>Tébessa</option>
+                        <option value="Tlemcen" {{ old('wilaya') == 'Tlemcen' ? 'selected' : '' }}>Tlemcen</option>
+                        <option value="Tiaret" {{ old('wilaya') == 'Tiaret' ? 'selected' : '' }}>Tiaret</option>
+                        <option value="Tizi Ouzou" {{ old('wilaya') == 'Tizi Ouzou' ? 'selected' : '' }}>Tizi Ouzou</option>
+                        <option value="Alger" {{ old('wilaya') == 'Alger' ? 'selected' : '' }}>Alger</option>
+                        <option value="Djelfa" {{ old('wilaya') == 'Djelfa' ? 'selected' : '' }}>Djelfa</option>
+                        <option value="Jijel" {{ old('wilaya') == 'Jijel' ? 'selected' : '' }}>Jijel</option>
+                        <option value="Sétif" {{ old('wilaya') == 'Sétif' ? 'selected' : '' }}>Sétif</option>
+                        <option value="Saïda" {{ old('wilaya') == 'Saïda' ? 'selected' : '' }}>Saïda</option>
+                        <option value="Skikda" {{ old('wilaya') == 'Skikda' ? 'selected' : '' }}>Skikda</option>
+                        <option value="Sidi Bel Abbès" {{ old('wilaya') == 'Sidi Bel Abbès' ? 'selected' : '' }}>Sidi Bel Abbès</option>
+                        <option value="Annaba" {{ old('wilaya') == 'Annaba' ? 'selected' : '' }}>Annaba</option>
+                        <option value="Guelma" {{ old('wilaya') == 'Guelma' ? 'selected' : '' }}>Guelma</option>
+                        <option value="Constantine" {{ old('wilaya') == 'Constantine' ? 'selected' : '' }}>Constantine</option>
+                        <option value="Médéa" {{ old('wilaya') == 'Médéa' ? 'selected' : '' }}>Médéa</option>
+                        <option value="Mostaganem" {{ old('wilaya') == 'Mostaganem' ? 'selected' : '' }}>Mostaganem</option>
+                        <option value="M'Sila" {{ old('wilaya') == 'M\'Sila' ? 'selected' : '' }}>M'Sila</option>
+                        <option value="Mascara" {{ old('wilaya') == 'Mascara' ? 'selected' : '' }}>Mascara</option>
+                        <option value="Ouargla" {{ old('wilaya') == 'Ouargla' ? 'selected' : '' }}>Ouargla</option>
+                        <option value="Oran" {{ old('wilaya') == 'Oran' ? 'selected' : '' }}>Oran</option>
+                        <option value="El Bayadh" {{ old('wilaya') == 'El Bayadh' ? 'selected' : '' }}>El Bayadh</option>
+                        <option value="Illizi" {{ old('wilaya') == 'Illizi' ? 'selected' : '' }}>Illizi</option>
+                        <option value="Bordj Bou Arréridj" {{ old('wilaya') == 'Bordj Bou Arréridj' ? 'selected' : '' }}>Bordj Bou Arréridj</option>
+                        <option value="Boumerdès" {{ old('wilaya') == 'Boumerdès' ? 'selected' : '' }}>Boumerdès</option>
+                        <option value="El Tarf" {{ old('wilaya') == 'El Tarf' ? 'selected' : '' }}>El Tarf</option>
+                        <option value="Tindouf" {{ old('wilaya') == 'Tindouf' ? 'selected' : '' }}>Tindouf</option>
+                        <option value="Tissemsilt" {{ old('wilaya') == 'Tissemsilt' ? 'selected' : '' }}>Tissemsilt</option>
+                        <option value="El Oued" {{ old('wilaya') == 'El Oued' ? 'selected' : '' }}>El Oued</option>
+                        <option value="Khenchela" {{ old('wilaya') == 'Khenchela' ? 'selected' : '' }}>Khenchela</option>
+                        <option value="Souk Ahras" {{ old('wilaya') == 'Souk Ahras' ? 'selected' : '' }}>Souk Ahras</option>
+                        <option value="Tipaza" {{ old('wilaya') == 'Tipaza' ? 'selected' : '' }}>Tipaza</option>
+                        <option value="Mila" {{ old('wilaya') == 'Mila' ? 'selected' : '' }}>Mila</option>
+                        <option value="Aïn Defla" {{ old('wilaya') == 'Aïn Defla' ? 'selected' : '' }}>Aïn Defla</option>
+                        <option value="Naâma" {{ old('wilaya') == 'Naâma' ? 'selected' : '' }}>Naâma</option>
+                        <option value="Aïn Témouchent" {{ old('wilaya') == 'Aïn Témouchent' ? 'selected' : '' }}>Aïn Témouchent</option>
+                        <option value="Ghardaïa" {{ old('wilaya') == 'Ghardaïa' ? 'selected' : '' }}>Ghardaïa</option>
+                        <option value="Relizane" {{ old('wilaya') == 'Relizane' ? 'selected' : '' }}>Relizane</option>
+                    </select>
                 </div>
 
                 <div class="form-row">
@@ -135,29 +193,6 @@
                     </div>
                 </div>
 
-                <div class="form-group" id="wilaya-group" style="display: none;">
-                    <label for="wilaya" class="form-label">Wilaya *</label>
-                    <select name="wilaya" id="wilaya" class="form-select">
-                        <option value="">Sélectionnez votre wilaya</option>
-                        <option value="Alger" {{ old('wilaya') == 'Alger' ? 'selected' : '' }}>Alger</option>
-                        <option value="Oran" {{ old('wilaya') == 'Oran' ? 'selected' : '' }}>Oran</option>
-                        <option value="Constantine" {{ old('wilaya') == 'Constantine' ? 'selected' : '' }}>Constantine</option>
-                        <option value="Annaba" {{ old('wilaya') == 'Annaba' ? 'selected' : '' }}>Annaba</option>
-                        <option value="Blida" {{ old('wilaya') == 'Blida' ? 'selected' : '' }}>Blida</option>
-                        <option value="Tizi Ouzou" {{ old('wilaya') == 'Tizi Ouzou' ? 'selected' : '' }}>Tizi Ouzou</option>
-                        <option value="Sétif" {{ old('wilaya') == 'Sétif' ? 'selected' : '' }}>Sétif</option>
-                        <option value="Batna" {{ old('wilaya') == 'Batna' ? 'selected' : '' }}>Batna</option>
-                        <option value="Djelfa" {{ old('wilaya') == 'Djelfa' ? 'selected' : '' }}>Djelfa</option>
-                        <option value="Sidi Bel Abbès" {{ old('wilaya') == 'Sidi Bel Abbès' ? 'selected' : '' }}>Sidi Bel Abbès</option>
-                    </select>
-                </div>
-
-                <div class="form-group" id="pays-group" style="display: none;">
-                    <label for="pays" class="form-label">Pays *</label>
-                    <input type="text" name="pays" id="pays" class="form-input" 
-                           value="{{ old('pays') }}" placeholder="Entrez votre pays">
-                </div>
-
                 <div class="form-group">
                     <label for="club" class="form-label">Club (si applicable)</label>
                     <input type="text" name="club" id="club" class="form-input" 
@@ -174,8 +209,8 @@
                         </select>
                     </div>
                     
-                    <div class="form-group" id="numero_licence_group">
-                        <label for="numero_licence" class="form-label">Numéro de licence</label>
+                    <div class="form-group" id="numero_licence_group" style="display: none;">
+                        <label for="numero_licence" class="form-label">Numéro de licence *</label>
                         <input type="text" name="numero_licence" id="numero_licence" class="form-input" 
                                value="{{ old('numero_licence') }}" placeholder="Votre numéro de licence">
                     </div>
@@ -229,7 +264,7 @@
                     <span class="btn-text">Procéder au Paiement</span>
                     <span class="btn-price" id="paymentPrice">
                         @if($event)
-                            {{ $event->prix }} DA
+                            {{ number_format($event->prix, 0, ',', ' ') }} DA
                         @else
                             0 DA
                         @endif
@@ -241,6 +276,7 @@
 </div>
 
 <style>
+    /* Your existing CSS styles remain the same */
     .payment-container {
         max-width: 800px;
         margin: 40px auto;
@@ -450,6 +486,15 @@
         font-weight: 600;
         border-radius: 12px;
         transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+        background: var(--primary);
+        color: white;
+    }
+
+    .btn-payment:hover {
+        background: var(--primary-dark);
+        transform: translateY(-2px);
     }
 
     .btn-price {
@@ -485,12 +530,11 @@
         const paymentPrice = document.getElementById('paymentPrice');
         const nationaliteSelect = document.getElementById('nationalite');
         const wilayaGroup = document.getElementById('wilaya-group');
-        const paysGroup = document.getElementById('pays-group');
         const wilayaSelect = document.getElementById('wilaya');
-        const paysInput = document.getElementById('pays');
         const affilieFederationSelect = document.getElementById('affilie_federation');
         const numeroLicenceGroup = document.getElementById('numero_licence_group');
         const numeroLicenceInput = document.getElementById('numero_licence');
+        const paymentForm = document.getElementById('paymentForm');
         
         // Get event details from selected option
         function loadEventDetails(eventId) {
@@ -500,52 +544,42 @@
                 return;
             }
             
-            // Find the selected option
             const selectedOption = eventSelect.options[eventSelect.selectedIndex];
             if (selectedOption && selectedOption.value) {
                 const eventPrice = selectedOption.getAttribute('data-price');
+                const eventDescription = selectedOption.getAttribute('data-description');
+                const eventDate = selectedOption.getAttribute('data-date');
                 const optionText = selectedOption.textContent;
                 
-                // Extract event title and date from option text
                 const titleMatch = optionText.match(/(.*?) - \d+/);
-                const dateMatch = optionText.match(/\(([^)]+)\)/);
-                
                 const eventTitle = titleMatch ? titleMatch[1] : 'Événement';
-                const eventDate = dateMatch ? dateMatch[1] : '';
                 
                 eventDetails.innerHTML = `
                     <div class="event-card-preview">
                         <h3>${eventTitle}</h3>
+                        <p class="event-description">${eventDescription || 'Aucune description disponible.'}</p>
                         <div class="event-meta">
                             <span class="event-date">📅 ${eventDate}</span>
-                            <span class="event-price">💰 ${eventPrice} DA</span>
+                            <span class="event-price">💰 ${parseInt(eventPrice).toLocaleString('fr-FR')} DA</span>
                         </div>
                     </div>
                 `;
                 
-                paymentPrice.textContent = `${eventPrice} DA`;
+                paymentPrice.textContent = `${parseInt(eventPrice).toLocaleString('fr-FR')} DA`;
             }
         }
         
-        // Handle nationality change
+        // Handle nationality change - ONLY show wilaya for Algeria
         function handleNationaliteChange() {
             const nationalite = nationaliteSelect.value;
             
             if (nationalite === 'Algérie') {
                 wilayaGroup.style.display = 'block';
-                paysGroup.style.display = 'none';
                 wilayaSelect.setAttribute('required', 'required');
-                paysInput.removeAttribute('required');
-            } else if (nationalite) {
-                wilayaGroup.style.display = 'none';
-                paysGroup.style.display = 'block';
-                wilayaSelect.removeAttribute('required');
-                paysInput.setAttribute('required', 'required');
             } else {
                 wilayaGroup.style.display = 'none';
-                paysGroup.style.display = 'none';
                 wilayaSelect.removeAttribute('required');
-                paysInput.removeAttribute('required');
+                wilayaSelect.value = '';
             }
         }
         
@@ -554,32 +588,62 @@
             const affilie = affilieFederationSelect.value;
             
             if (affilie === 'oui') {
+                numeroLicenceGroup.style.display = 'block';
                 numeroLicenceInput.setAttribute('required', 'required');
             } else {
+                numeroLicenceGroup.style.display = 'none';
                 numeroLicenceInput.removeAttribute('required');
+                numeroLicenceInput.value = '';
+            }
+        }
+
+        // Form submission handler
+        function handleFormSubmit(event) {
+            const nationalite = nationaliteSelect.value;
+            const wilaya = wilayaSelect.value;
+            const affilie = affilieFederationSelect.value;
+            const numeroLicence = numeroLicenceInput.value;
+            const typePaiement = document.querySelector('input[name="type_paiement"]:checked');
+
+            // Validate payment method
+            if (!typePaiement) {
+                event.preventDefault();
+                alert('Veuillez sélectionner une méthode de paiement.');
+                return;
+            }
+
+            // Validate wilaya for Algerians
+            if (nationalite === 'Algérie' && !wilaya) {
+                event.preventDefault();
+                alert('Veuillez sélectionner votre wilaya.');
+                return;
+            }
+
+            // Validate license number if affiliated
+            if (affilie === 'oui' && !numeroLicence) {
+                event.preventDefault();
+                alert('Veuillez saisir votre numéro de licence.');
+                return;
             }
         }
         
-        // Event selection change
+        // Event listeners
         eventSelect.addEventListener('change', function() {
             loadEventDetails(this.value);
         });
         
-        // Nationality change
         nationaliteSelect.addEventListener('change', handleNationaliteChange);
         
-        // Federation affiliation change
         affilieFederationSelect.addEventListener('change', handleAffilieFederationChange);
         
-        // Initialize if event is preselected
+        paymentForm.addEventListener('submit', handleFormSubmit);
+        
+        // Initialize
         @if($event)
             loadEventDetails({{ $event->id }});
         @endif
         
-        // Initialize nationality field
         handleNationaliteChange();
-        
-        // Initialize federation affiliation field
         handleAffilieFederationChange();
     });
 </script>

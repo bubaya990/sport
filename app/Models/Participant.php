@@ -7,12 +7,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Participant extends Model
 {
-     protected $fillable = [
+    protected $fillable = [
         'nom', 'prenom', 'telephone', 'adresse', 'date_naissance', 
-        'ville', 'email', 'sexe', 'size'
+        'nationalite', 'wilaya', 'email', 'sexe', 
+        'taille_maillot', 'club', 'affilie_federation', 'numero_licence'
     ];
-
-  
 
     protected $casts = [
         'date_naissance' => 'date',
